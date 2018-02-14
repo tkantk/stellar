@@ -1,0 +1,70 @@
+{
+  "name": "metrics",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "BUnit": {
+      "type": "string",
+      "required": false
+    },
+    "project": {
+      "type": "string",
+      "required": true,
+      "id":2
+     
+    },
+    "account": {
+      "type": "string",
+      "required": true
+    },
+    "category": {
+      "type": "string",
+      "required": true
+    },
+    "priority": {
+      "type": "string",
+      "required": true
+    },
+    "TicketId": {
+      "type": "string",
+      "required": true,
+      "id":1
+   
+
+      
+    },
+    "ticketTitle": {
+      "type": "string",
+      "required": true
+    },
+    "resolvedOn": {
+      "type": "date",
+      "required": true
+    },
+    "responseTime": {
+      "type": "number",
+      "required": true
+    },
+    "resolutionTime": {
+      "type": "number",
+      "required": true
+    },
+    "createdOn": {
+      "type": "date",
+      "required": false,
+      "default" :  "$now"
+    },
+    "createdBy": {
+      "type": "string",
+      "required": false
+         }
+    
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
