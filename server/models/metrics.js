@@ -35,12 +35,33 @@ module.exports = function(Metrics) {
     });
 }
 
-Metrics.upload = function(ctx, cb) {
+Metrics.upload = function(req, cb) {
   
-var fileUpload = require('express-fileupload');
+//var fileUpload = require('express-fileupload');
 //Metrics.use(fileUpload());
-Metrics.post('/upload', function(req, res) {
+//Metrics.post('/upload', function(req, res) {
   
+  const mapper = require('../../common/models/mapper.json');
+        var mongoXlsx = require('mongo-xlsx');
+      console.log("hello im the upload excel function");
+      //var loopback = require('loopback');
+	  console.log(req);
+		var sampleFile;
+    
+		sampleFile = req.files.file;
+		console.log(sampleFile);
+		xlsxData2MongoData(sampleFile, mapper);
+		
+        /*mongoXlsx.xlsx2MongoData("./test2.csv", mapper, function(err, mongoData) {
+          console.log('Mongo data:', mongoData);
+          mongoData.forEach(element => {
+            Metrics.upsert(element, null);
+          });
+          
+         cb(null, "inserted into DB");
+    });*/
+  
+ /* 
   if (!req.files.file) {
    res.send("No files were uploaded.");
    return;
@@ -60,8 +81,7 @@ Metrics.post('/upload', function(req, res) {
     console.log("excel file found");
   }
   }
-});
-});
+});*/
 };
 
     Metrics.remoteMethod('uploadExcel', {
@@ -80,7 +100,7 @@ Metrics.post('/upload', function(req, res) {
 
       Metrics.remoteMethod('upload', {
         accepts: [
-          {arg: 'ctx', type: 'object', http: {source: 'context'}},
+          {arg: 'req', type: 'object', http: {source: 'req'}},
         ],
         http: {
           path: '/upload',

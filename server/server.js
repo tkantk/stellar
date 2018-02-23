@@ -2,6 +2,8 @@
 
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+var fileUpload = require('express-fileupload');
+var mongoose = require('mongoose');
 
 var app = module.exports = loopback();
 
@@ -18,7 +20,7 @@ app.start = function() {
   });
 };
 
-var fileUpload = require('express-fileupload');
+/*var fileUpload = require('express-fileupload');
 app.use(fileUpload());
 app.post('/upload', function(req, res) {
   
@@ -42,7 +44,7 @@ app.post('/upload', function(req, res) {
   }
   }
 });
-});
+});*/
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function(err) {
@@ -52,3 +54,12 @@ boot(app, __dirname, function(err) {
   if (require.main === module)
     app.start();
 });
+
+app.use(fileUpload());
+mongoose.connect('mongodb://localhost:27017/mongodb');
+app.get('/csvUploadForm', function (req, res) {
+  res.sendFile(__dirname + '/upload.html');
+});
+ 
+var upload = require('./upload.js');
+app.post('/csvUploadForm', upload.post);

@@ -5,7 +5,7 @@
   },
   
     "mongodb": {
-      "name": "mongoDB",
+      "name": "mongodb",
       "host": "localhost",
       "database": "metrics",
       "connector": "mongodb",
