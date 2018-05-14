@@ -13,33 +13,36 @@
       "./mixins"
     ]
   },
-  "User": {
-    "dataSource": "db"
+  "ApplicationUser": {
+    "dataSource": "StellarAuthDB",
+    "options": {
+      "strictObjectIDCoercion": false
+    },
+    "public" : true
   },
-  "AccessToken": {
-    "dataSource": "db",
-    "public": true
+  "ApplicationAccessToken": {
+    "dataSource": "StellarAuthDB",
+    "public": false
   },
   "ACL": {
-    "dataSource": "db",
+    "dataSource": "StellarAuthDB",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "db",
-    "public": false,
-    "options": {
-      "strictObjectIDCoercion": true
-    }
+    "dataSource": "StellarAuthDB",
+    "public": false
+    
   },
   "Role": {
-    "dataSource": "db",
+    "dataSource": "StellarAuthDB",
     "public": false
   },
-  "Note": {
-    "dataSource": "db"
+  "projectConfiguration": {
+    "dataSource": "StellarDB",
+    "public": true
   },
   "metrics": {
-    "dataSource": "mongodb",
+    "dataSource": "StellarDB",
     "public": true
   }
 }

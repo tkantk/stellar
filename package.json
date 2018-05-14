@@ -1,5 +1,5 @@
 {
-  "name": "metrics-node-services",
+  "name": "stellar",
   "version": "1.0.0",
   "main": "server/server.js",
   "engines": {
@@ -8,30 +8,36 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node .",
-    "posttest": "npm run lint && nsp check"
+    "posttest": "npm run lint && nsp check",
+    "client": "cd client && yarn start",
+    "server": "nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "dependencies": {
     "compression": "^1.0.3",
     "cors": "^2.5.2",
+    "csv": "^3.0.0",
+    "fast-csv": "^2.4.1",
     "helmet": "^1.3.0",
     "loopback": "^3.0.0",
     "loopback-boot": "^2.6.5",
-    "loopback-component-explorer": "^5.0.0",
-    "loopback-connector-mongodb": "^3.3.1",
-    "mongo-xlsx": "^1.0.12",
-    "mongodb": "^3.0.1",
+    "loopback-component-explorer": "^4.0.0",
+    "loopback-component-storage": "^3.3.1",
+    "loopback-connector-mongodb": "^1.18.1",
+    "multer": "^1.3.0",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^2.0.0"
   },
   "devDependencies": {
     "eslint": "^3.17.1",
     "eslint-config-loopback": "^8.0.0",
-    "nsp": "^2.1.0"
+    "nsp": "^2.1.0",
+    "concurrently": "^3.5.0"
   },
   "repository": {
     "type": "",
     "url": ""
   },
-  "license": "UNLICENSED",
-  "description": "metrics-node-services"
+  "license": "MIT",
+  "description": "stellar"
 }

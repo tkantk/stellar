@@ -1,0 +1,81 @@
+{
+  "name": "projectConfiguration",
+  "plural": "projectConfigurations",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true,
+    "strictObjectIDCoercion": true
+  },
+  "properties": {
+    "projectName": {
+      "type": "string",
+      "required": true
+    },
+    "accountName": {
+      "type": "string",
+      "required": true
+    },
+    "numberOfServer": {
+      "type": "number",
+      "required": true
+    },
+    "numberOfApplication": {
+      "type": "number",
+      "required": true
+    },
+    "numberOfIntegration": {
+      "type": "number",
+      "required": true
+    },
+    "numberOfEnvironment": {
+      "type": "number",
+      "required": true
+    },
+    "initialInvestigation": {
+      "type": "number",
+      "required": true
+    },
+    "logAnalysis": {
+      "type": "number",
+      "required": true
+    },
+    "codeAnalysis": {
+      "type": "number",
+      "required": true
+    },
+    "integrationAnalysis": {
+      "type": "number",
+      "required": true
+    },
+    "communication": {
+      "type": "number",
+      "required": true
+    },
+    "codeFixes": {
+      "type": "number",
+      "required": true
+    },
+    "unitTesting": {
+      "type": "number",
+      "required": true
+    },
+    "sanityTesting": {
+      "type": "number",
+      "required": true
+    },
+    "documentationAndRelease": {
+      "type": "number",
+      "required": true
+    },
+    "id":{
+      "type": "string",
+      "generated": false,
+      "id": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

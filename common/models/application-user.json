@@ -1,0 +1,39 @@
+{
+    "name": "ApplicationUser",
+    "base": "User",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "firstName" : {
+            "type" : "String",
+            "required": true
+        },
+        "id" : {
+            "type" : "String",
+            "generated": true,
+            "id": true
+        }
+    },
+    "validations": [],
+    "relations": {
+        "accessTokens": {
+            "type": "hasMany",
+            "model": "ApplicationAccessToken",
+            "foreignKey": "userId",
+            "options": {
+                "disableInclude": true
+            }
+        }
+    },
+    "acls": [
+        {
+        "principalType": "ROLE",
+        "principalId": "$everyone",
+        "permission": "ALLOW",
+        "property": "addToLogin"
+        }
+    ],
+    "methods": {}
+}

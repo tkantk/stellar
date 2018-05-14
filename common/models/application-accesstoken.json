@@ -1,0 +1,19 @@
+{
+    "name": "ApplicationAccessToken",
+    "base": "AccessToken",
+    "idInjection": true,
+    "options": {
+      "validateUpsert": true
+    },
+    "properties": {},
+    "validations": [],
+    "relations": {
+      "user": {
+        "type": "belongsTo",
+        "model": "ApplicationUser",
+        "foreignKey": "userId"
+      }
+    },
+    "acls": [],
+    "methods": {}
+  }

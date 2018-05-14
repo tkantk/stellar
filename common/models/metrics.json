@@ -1,0 +1,56 @@
+{
+  "name": "metrics",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "Business Unit": {
+      "type": "string",
+      "required": false
+    },
+    "Project": {
+      "type": "string",
+      "id": 2,
+      "required": true
+    },
+    "Account": {
+      "type": "string",
+      "required": true
+    },
+    "Category": {
+      "type": "string",
+      "required": true
+    },
+    "Priority": {
+      "type": "string",
+      "required": true
+    },
+    "TicketID": {
+      "type": "string",
+      "id": 1,
+      "required": true
+    },
+    "Ticket Description": {
+      "type": "string",
+      "required": true
+    },
+    "Resolved On": {
+      "type": "date",
+      "required": true
+    },
+    "Response Time": {
+      "type": "number",
+      "required": true
+    },
+    "Resolution Time": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

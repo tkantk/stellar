@@ -1,15 +1,22 @@
 {
-  "db": {
-    "name": "db",
-    "connector": "memory"
+  "StellarDB": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "",
+    "database": "StellarDB",
+    "password": "",
+    "name": "StellarDB",
+    "user": "",
+    "connector": "mongodb"
   },
-  
-    "mongodb": {
-      "name": "mongodb",
-      "host": "localhost",
-      "database": "metrics",
-      "connector": "mongodb",
-      "port": 27017
-    }
-  
+  "StellarAuthDB": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "",
+    "database": "StellarAuthDB",
+    "password": "",
+    "name": "StellarAuthDB",
+    "user": "",
+    "connector": "mongodb"
+  }
 }
