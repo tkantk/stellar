@@ -1,7 +1,7 @@
 {
   "name": "metrics",
   "base": "PersistedModel",
-  "idInjection": false,
+  "idInjection": true,
   "options": {
     "validateUpsert": true
   },
@@ -12,7 +12,6 @@
     },
     "Project": {
       "type": "string",
-      "id": 2,
       "required": true
     },
     "Account": {
@@ -29,7 +28,6 @@
     },
     "TicketID": {
       "type": "string",
-      "id": 1,
       "required": true
     },
     "Ticket Description": {
@@ -47,6 +45,10 @@
     "Resolution Time": {
       "type": "number",
       "required": true
+    },
+    "id" : {
+      "type" : "string",
+      "id" : true
     }
   },
   "validations": [],

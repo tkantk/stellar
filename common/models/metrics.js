@@ -13,7 +13,7 @@ module.exports = function (Metrics) {
     }).on("data", function(data){
       authors.push(data);
     }).on("end", function(){
-      Metrics.replaceOrCreate(authors)
+      Metrics.create(authors)
       //console.log("Insertion Complete :: "+authors.length+ " rows" )
     })
     return "Insertion Complete :: "+authors.length+ " rows"
@@ -56,5 +56,15 @@ module.exports = function (Metrics) {
       arg: 'message',
       type: 'string',
     }
+  });
+  
+  Metrics.observe('before save', function updateId(ctx, next) {
+    console.log(ctx)
+    if (ctx.instance) {
+      ctx.instance.id = ctx.instance.Project + "_"+ctx.instance.TicketID;
+    } else {
+      //ctx.data.id = ctx.data.Project + "_"+ctx.data.TicketID;
+    }
+    next();
   });
 };
