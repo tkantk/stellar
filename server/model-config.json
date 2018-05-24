@@ -41,7 +41,7 @@
     "dataSource": "StellarDB",
     "public": true
   },
-  "metrics": {
+  "Metrics": {
     "dataSource": "StellarDB",
     "public": true
   }
