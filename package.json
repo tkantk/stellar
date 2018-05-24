@@ -29,10 +29,15 @@
     "strong-error-handler": "^2.0.0"
   },
   "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "concurrently": "^3.5.0",
     "eslint": "^3.17.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-google": "^0.9.1",
     "eslint-config-loopback": "^8.0.0",
-    "nsp": "^2.1.0",
-    "concurrently": "^3.5.0"
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-react": "^7.8.2",
+    "nsp": "^2.1.0"
   },
   "repository": {
     "type": "",

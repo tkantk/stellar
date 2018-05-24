@@ -1,18 +1,19 @@
 var parse = require('csv-parse');
 
 
-exports.post = function (req, res, next) {
-    //console.log(req.file.buffer.toString());
+exports.post = function (req, res)
+    {    //console.log(req.file.buffer.toString());
     if (!req.file){
         return res.status(400).send('No files were uploaded.');
     }else{
         var file = req.file;
         var output = [];
+        var record;
          // Create the parser
         var parser = parse({delimiter: ','});
 
         parser.on('readable', function(){
-            while(record = parser.read()){
+            while((record = parser.read())){
               output.push(record);
             }
           });
