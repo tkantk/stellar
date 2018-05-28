@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "start": "node .",
     "posttest": "npm run lint && nsp check",
-    "client": "cd client && yarn start",
+    "client": "cd frontend && yarn start",
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },

@@ -1,95 +1,53 @@
-import React, { Component } from 'react';
+import React from 'react';
+import axios from 'axios';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
-import AppBar from 'material-ui/AppBar';
-import FontIcon from 'material-ui/FontIcon';
-import {blue500, red500, greenA200} from 'material-ui/styles/colors';
-import UploadScreen from './UploadScreen';
-import Pastfiles from './Pastfiles';
-import LoginScreen from './Loginscreen'
+import UploadData from './UploadScreen';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {draweropen: false,currentScreen:[]};
-  }
-  componentDidMount(){
-    var currentScreen=[];
-    currentScreen.push(<UploadScreen appContext={this.props.appContext} role={this.props.role}/>);
-    this.setState({currentScreen})
-  }
-  /**
-   * Toggle opening and closing of drawer
-   * @param {*} event 
-   */ 
-  toggleDrawer(event){
-  // console.log("drawer click");
-  this.setState({draweropen: !this.state.draweropen})
-  }
-  handleMenuClick(event,page){
-    switch(page){
-      case "openprint":
-      // console.log("need to open uploadapge")
-      var currentScreen=[];
-      currentScreen.push(<UploadScreen appContext={this.props.appContext} role={this.props.role}/>);
-      this.setState({currentScreen})
-      break;
-      case "openpast":
-      // console.log("need to open pastfiles")
-      var currentScreen=[];
-      currentScreen.push(<Pastfiles appContext={this.props.appContext} role={this.props.role}/>);
-      this.setState({currentScreen})
-      break;
-      case "logout":
-      var loginPage =[];
-      loginPage.push(<LoginScreen appContext={this.props.appContext}/>);
-      this.props.appContext.setState({loginPage:loginPage,uploadScreen:[]})
-      break;
+class FileUploadForm extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {status : ''};
+  
+      this.handleSubmit = this.handleSubmit.bind(this);
     }
-    this.setState({draweropen:false})
-  }
-  render() {
-    return (
-      <div className="App">
-        <MuiThemeProvider>
-          <AppBar
-            title="Printing Page"
-            onLeftIconButtonTouchTap={(event) => this.toggleDrawer(event)}
-          />
-        </MuiThemeProvider>
-        <MuiThemeProvider>
-          <Drawer open={this.state.draweropen}>
-            <MenuItem>
-              <div>
-              User Profile
-              <a href="#"><FontIcon
-                className="material-icons drawerclosebutton"
-                color={blue500}
-                styles={{ top:10,}}
-                onClick={(event) => this.toggleDrawer(event)}
-              >clear</FontIcon></a>
-              </div>
-            </MenuItem>
-              <div>
-              <MenuItem onClick={(event) => this.handleMenuClick(event,"openprint")}>
-                  Printing Page
-              </MenuItem>
-              <MenuItem onClick={(event) => this.handleMenuClick(event,"openpast")}>
-                  Past Files
-              </MenuItem>
-              <MenuItem onClick={(event) => this.handleMenuClick(event,"logout")}>
-                  Logout
-              </MenuItem>
-              </div> 
-          </Drawer>
-        </MuiThemeProvider>
-        <div>
-          {this.state.currentScreen}
-        </div>
-      </div>
-    );
-  }
-}
 
-export default App;
+    handleSubmit(event) {
+        var formData = new FormData();
+        var csvfile = document.querySelector('#file');
+        formData.append("file", csvfile.files[0]);
+        this.callApi(formData)
+        event.preventDefault();
+    }
+
+    callApi = async (formData) => {
+        axios.post('/api/metrics/uploadExcel', formData, {
+            headers: {
+            'Content-Type': 'multipart/form-data'
+            }
+        }).then(res => {
+            this.setState({status : res.data.message})
+        }).catch(err => console.log(err))
+    };
+    
+    render() {
+        const uploadstatus = this.state.status;  
+        console.log(this.state)
+      return (
+        <MuiThemeProvider>
+          <div>
+              <form onSubmit={this.handleSubmit}>
+              <label>
+                  Select CSV File:
+                  <input type="file" id="file" onChange={this.handleChange} />
+              </label>
+              <input type="submit" value="Submit" />
+              </form>
+              <div>STATUS  :: {uploadstatus}</div>
+            <UploadData />
+          </div>
+        </MuiThemeProvider>
+      );
+    }
+  }
+
+  export default FileUploadForm;
