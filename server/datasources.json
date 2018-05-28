@@ -7,7 +7,8 @@
     "password": "",
     "name": "StellarDB",
     "user": "",
-    "connector": "mongodb"
+    "connector": "mongodb",
+    "allowExtendedOperators": true
   },
   "StellarAuthDB": {
     "host": "localhost",

@@ -1,5 +1,5 @@
 {
-  "name": "projectConfiguration",
+  "name": "ProjectConfiguration",
   "plural": "projectConfigurations",
   "base": "PersistedModel",
   "idInjection": true,
@@ -10,6 +10,11 @@
   "properties": {
     "projectName": {
       "type": "string",
+      "required": true,
+      "id":1
+    },
+    "userId": {
+      "type": "string",
       "required": true
     },
     "accountName": {
@@ -18,64 +23,73 @@
     },
     "numberOfServer": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "numberOfApplication": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "numberOfIntegration": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "numberOfEnvironment": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "initialInvestigation": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "logAnalysis": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "codeAnalysis": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "integrationAnalysis": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "communication": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "codeFixes": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "unitTesting": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "sanityTesting": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "documentationAndRelease": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "id":{
       "type": "string",
-      "generated": false,
+      "generated": true,
       "id": true
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "userId": {
+      "type": "belongsTo",
+      "model": "ApplicationUser",
+      "foreignKey": "userId",
+      "options": {
+        "disableInclude": true
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

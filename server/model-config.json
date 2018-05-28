@@ -37,12 +37,24 @@
     "dataSource": "StellarAuthDB",
     "public": false
   },
-  "projectConfiguration": {
+  "ProjectConfiguration": {
     "dataSource": "StellarDB",
-    "public": true
-  },
+    "public": true,
+    "options": {
+      "validateUpsert": true,
+      "mongodb": {
+      "allowExtendedOperators": true
+      }
+    }
+},
   "Metrics": {
     "dataSource": "StellarDB",
-    "public": true
+    "public": true,
+    "options": {
+      "validateUpsert": true,
+      "mongodb": {
+      "allowExtendedOperators": true
+      }
+    }
   }
 }
