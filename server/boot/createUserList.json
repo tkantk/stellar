@@ -1,0 +1,7 @@
+{
+  "ApplicationUser": [
+    {"username": "neha", "email": "nagupta@sapient.com", "password": "neha", "role":"admin", "firstName": "Neha","lastName": "Gupta","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["MGM"]},
+    {"username": "nehaMGM", "email": "ngupta56@sapient.com", "password": "nehaMGM", "role":"projectAdmin", "firstName": "Neha","lastName": "Gupta","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["MGM"]},
+    {"username": "nehaTigers", "email": "nehgupta0@publicisgroupe.net", "password": "nehaTigers", "role":"projectAdmin", "firstName": "Neha","lastName": "Gupta","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["MGM","Michelin"]}
+   ]
+}

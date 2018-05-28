@@ -10,30 +10,47 @@
             "type" : "String",
             "required": true
         },
+        "lastName": {
+            "type": "string",
+            "required": false
+          },
+          "modifiedon": {
+            "type": "date",
+            "required": false
+          },
+          "registeredon": {
+            "type": "date",
+            "required": false
+          },
+          "location": {
+            "type": "string",
+            "required": false
+         },
         "id" : {
             "type" : "String",
             "generated": true,
             "id": true
+        },
+        "projects" : {
+            "type" : ["String"]
+       
         }
     },
     "validations": [],
-    "relations": {
+	"relations": {
         "accessTokens": {
             "type": "hasMany",
             "model": "ApplicationAccessToken",
-            "foreignKey": "userId",
-            "options": {
-                "disableInclude": true
+            "foreignKey": "userId"
+           
+                    },
+        "projects": {
+              "type": "hasMany",
+              "model": "projectConfigurations",
+              "foreignKey": "projectName"      
             }
-        }
+           
     },
-    "acls": [
-        {
-        "principalType": "ROLE",
-        "principalId": "$everyone",
-        "permission": "ALLOW",
-        "property": "addToLogin"
-        }
-    ],
+    "acls": [],
     "methods": {}
 }

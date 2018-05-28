@@ -40,6 +40,64 @@ module.exports = function (Metrics) {
     })    
   };
 
+
+  Metrics.getMetricsData = function (ctx, userId, cb) {
+    console.log("get method of metrics data is called");
+    var userIdValue = ctx.req.accessToken.userId;
+    
+    console.log(`userid from request is ${userIdValue}`);
+    
+    //find user role
+    Metrics.app.models.ApplicationUser.find(
+      {where:{id:`${userIdValue}`},},
+      function(err, user) {
+     ctx.req.userRole = user[0].role;
+     console.log(user[0].role);
+     if (ctx.req.userRole!='admin'){
+
+    //Find all projects where user has access to  
+    Metrics.app.models.ProjectConfiguration.find(
+      {where:{userId:`${userIdValue}`},},
+         function(err, projectConfig) {
+          console.log(projectConfig);
+        ctx.req.projectConfig = projectConfig[0].projectName;
+        console.log(projectConfig[0]);
+        var projectNames = [];
+        projectConfig.forEach(function(project){
+          console.log(project.projectName);
+          projectNames.push(project.projectName);
+        });
+        
+        console.log(projectNames);
+        
+      //find all metrics for projects where user has access to
+      Metrics.find( {where:{"Project":{in: projectNames}}},
+      function(err, metricsData) {
+          console.log(metricsData);
+        cb(null, metricsData);        
+      });
+    });      
+     }
+     else
+     {
+       console.log('User have admin role');
+      //return all metrics data
+       Metrics.find( {},
+       function(err, metricsData) {
+           console.log(metricsData); 
+         cb(null, metricsData);         
+       });       
+     }
+      });
+
+
+  };
+
+  Metrics.beforeRemote('getMetricsData', function(ctx, userId, next) {
+       console.log(`accesstoken from request ${ctx.req.accessToken.user}`);
+       next();
+  })
+
   Metrics.remoteMethod('uploadExcel', {
     accepts: [{
       arg: 'req',
@@ -56,5 +114,20 @@ module.exports = function (Metrics) {
       arg: 'message',
       type: 'string',
     }
+  })
+
+  Metrics.remoteMethod('getMetricsData', {
+    accepts: [
+      {arg: 'ctx', type: 'object', http: {source: 'context'}},
+      {arg: 'userId', type: 'number'},
+    ],
+    http: {
+      path: '/getMetricsData',
+      verb: 'get',
+    },
+    returns: {
+      arg: 'Metrics',
+      type: 'array',
+    },
   });
-};
+}

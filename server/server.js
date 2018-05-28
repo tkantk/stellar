@@ -30,6 +30,16 @@ boot(app, __dirname, function(err) {
     app.start();
 });
 
+app.use(function(req, res, next) {
+  app.currentUser = null;
+  if (!req.accessToken) return next();
+  req.accessToken.user(function(err, user) {
+    if (err) return next(err);
+    req.currentUser = user;
+    next();
+  });
+});
+
 var upload = require('./upload.js');
 var storage = multer.memoryStorage()
 var fileupload = multer({ storage: storage })
