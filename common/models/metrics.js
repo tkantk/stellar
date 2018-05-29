@@ -96,7 +96,82 @@ module.exports = function (Metrics) {
   Metrics.beforeRemote('getMetricsData', function(ctx, userId, next) {
        console.log(`accesstoken from request ${ctx.req.accessToken.user}`);
        next();
-  })
+  }),
+
+  Metrics.calcMetrics = function (ctx, startDate, endDate, proj, cb) {
+    console.log("calcMetrics method of metrics data is called");
+    var userIdValue = ctx.req.accessToken.userId;
+    console.log(`userid from request is ${userIdValue}`);
+    
+    //find user role
+    Metrics.app.models.ApplicationUser.find(
+      {where:{id:`${userIdValue}`},},
+      function(err, user) {
+     ctx.req.userRole = user[0].role;
+     console.log(user[0].role);
+     if (ctx.req.userRole!='admin'){
+
+    //Find all projects where user has access to  
+    Metrics.app.models.ProjectConfiguration.find(
+      {where:{userId:`${userIdValue}`},},
+         function(err, projectConfig) {
+          console.log(projectConfig);
+        ctx.req.projectConfig = projectConfig[0].projectName;
+        console.log(projectConfig[0]);
+        var projectNames = [];
+        projectConfig.forEach(function(project){
+          console.log(project.projectName);
+          projectNames.push(project.projectName);
+        });
+        
+        console.log(projectNames);
+        
+      //find all metrics for projects where user has access to
+     // Metrics.find( {where:{"Project":{in: projectNames}}},
+     var metricsCollection = Metrics.getDataSource().connector.collection(Metrics.modelName);
+     metricsCollection.aggregate(
+      [
+          { $match: {$and:[{'Resolved On': { $gte: new Date( startDate ), $lte: new Date( endDate ) }
+                    },
+                    {'Project':{$in: [proj]}}]}
+          },
+      {
+          $group: {
+            _id: {project: "$Project", priority:"$Priority"},count:{$sum:1},
+            
+            avg: {
+              $avg: "$Resolution Time"
+            },
+            min: {
+              $min: "$Resolution Time"
+            },
+            max: {
+              $max: "$Resolution Time"
+            }
+          },
+          
+          }			
+      ],
+     function(err, metricsData) {
+          console.log(metricsData);
+        cb(null, metricsData);        
+      });
+    });      
+     }
+     else
+     {
+       console.log('User have admin role');
+      //return all metrics data
+       Metrics.find( {},
+       function(err, metricsData) {
+           console.log(metricsData); 
+         cb(null, metricsData);         
+       });       
+     }
+      });
+
+
+  };
 
   Metrics.remoteMethod('uploadExcel', {
     accepts: [{
@@ -123,6 +198,23 @@ module.exports = function (Metrics) {
     ],
     http: {
       path: '/getMetricsData',
+      verb: 'get',
+    },
+    returns: {
+      arg: 'Metrics',
+      type: 'array',
+    },
+  })
+  
+  Metrics.remoteMethod('calcMetrics', {
+    accepts: [
+      {arg: 'ctx', type: 'object', http: {source: 'context'}},
+      {arg: 'startDate', type: 'date'},
+      {arg: 'endDate', type: 'date'},
+      {arg: 'proj', type: 'string'},
+    ],
+    http: {
+      path: '/calcMetrics',
       verb: 'get',
     },
     returns: {
