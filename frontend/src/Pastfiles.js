@@ -9,7 +9,7 @@ import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import {blue500, yellow600,red500, greenA200} from 'material-ui/styles/colors';
 import EditorInsertChart from 'material-ui/svg-icons/editor/insert-chart';
 import Checkbox from 'material-ui/Checkbox';
-import './App.css';
+import './Containers/App.css';
 import FontIcon from 'material-ui/FontIcon';
 var apiBaseUrl = "http://localhost:4000/api/";
 

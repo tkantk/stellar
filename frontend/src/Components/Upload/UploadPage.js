@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+
 import UploadData from './UploadScreen';
+import ButtonAppBar from '../AppBar/AppBar';
 
 class FileUploadForm extends React.Component {
     constructor(props) {
@@ -34,6 +36,7 @@ class FileUploadForm extends React.Component {
         console.log(this.state)
       return (
         <MuiThemeProvider>
+            <ButtonAppBar heading = "Home" appContext={this.props.appContext}/>
           <div>
               <form onSubmit={this.handleSubmit}>
               <label>

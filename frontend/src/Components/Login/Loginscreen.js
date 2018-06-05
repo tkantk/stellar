@@ -1,22 +1,44 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
+import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 import Login from './Login';
-import Register from './Register';
+import Register from '../Register/Register';
 
-const style = {
-  margin: 15,
-};
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  menu: {
+    width: 200,
+  },
+});
+const theme = createMuiTheme();
 
 class Loginscreen extends Component {
   constructor(props){
     super(props);
+    const { classes } = props;
     var loginButtons=[];
     loginButtons.push(
-      <MuiThemeProvider>
+      <MuiThemeProvider theme={theme}>
         <div>
-           <RaisedButton label={"Register Now"} primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+           <Button variant="raised" label={"Register Now"} color="primary"  primary={true} className={classes.button} onClick={(event) => this.handleClick(event)}>
+            Register Now
+           </Button>
        </div>
        </MuiThemeProvider>
     )
@@ -41,6 +63,7 @@ class Loginscreen extends Component {
   }
   handleClick(event){
     var loginmessage;
+    const { classes } = this.props;
     if(this.state.isLogin){
       let loginscreen=[];
       loginscreen.push(<Register parentContext={this} appContext={this.props.appContext}/>);
@@ -48,9 +71,11 @@ class Loginscreen extends Component {
       let loginButtons=[];
       loginButtons.push(
         <div key="login-button">
-        <MuiThemeProvider>
+        <MuiThemeProvider theme={theme}>
           <div>
-             <RaisedButton label={"Login"} primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+             <Button variant="raised" color="primary" label={"Login"} primary={true} className={classes.button} onClick={(event) => this.handleClick(event)}>
+              Login
+             </Button>
          </div>
          </MuiThemeProvider>
         </div>
@@ -65,9 +90,11 @@ class Loginscreen extends Component {
     else{
       let loginscreen=[],loginButtons=[];
       loginButtons.push(
-        <MuiThemeProvider>
+        <MuiThemeProvider theme={theme}>
           <div>
-             <RaisedButton label={"Register Now"} primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+             <Button variant="raised" label={"Register Now"} color="primary" primary={true} className={classes.button} onClick={(event) => this.handleClick(event)}>
+              Register Now
+             </Button>
          </div>
          </MuiThemeProvider>
       )
@@ -94,5 +121,9 @@ class Loginscreen extends Component {
   }
 }
 
+Loginscreen.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
-export default Loginscreen;
+
+export default withStyles(styles)(Loginscreen);

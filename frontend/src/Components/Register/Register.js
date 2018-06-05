@@ -1,10 +1,38 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+
+import PropTypes from 'prop-types';
+
+import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
 import axios from 'axios';
-import Login from './Login';
+
+import Login from '../Login/Login';
+import ButtonAppBar from '../AppBar/AppBar';
+
+const theme = createMuiTheme();
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  menu: {
+    width: 200,
+  },
+});
 
 class Register extends Component {
   constructor(props){
@@ -61,17 +89,15 @@ class Register extends Component {
 
   }
   render() {
-    // console.log("props",this.props);
+   const { classes } = this.props;
     var userhintText,userLabel;
       userhintText = "Enter your Email Id",
       userLabel = "Email Id"
     return (
       <div>
-        <MuiThemeProvider>
+        <MuiThemeProvider theme={theme}>
+          <ButtonAppBar heading = "Register"/>
           <div>
-          <AppBar
-             title="Register"
-           />
            <TextField
              hintText="Enter your First Name"
              floatingLabelText="First Name"
@@ -103,7 +129,9 @@ class Register extends Component {
              onChange = {(event,newValue) => this.setState({password:newValue})}
              />
            <br/>
-           <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+           <Button variant="raised" color="primary" label="Submit" primary={true} className={classes.button} onClick={(event) => this.handleClick(event)}>
+            Submit
+           </Button>
           </div>
          </MuiThemeProvider>
       </div>
@@ -111,8 +139,8 @@ class Register extends Component {
   }
 }
 
-const style = {
-  margin: 15,
+Register.propTypes = {
+  classes: PropTypes.object.isRequired,
 };
 
-export default Register;
+export default withStyles(styles)(Register);

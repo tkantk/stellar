@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import logo from './logo.svg';
-import './App.css';
+import '../../Containers/App.css';
+import {getCookie} from '../../Utils/Cookie';
 
 class UploadData extends Component {
 
@@ -18,12 +18,20 @@ class UploadData extends Component {
   }
 
   callApi = async () => {
-    const response = axios.get('/api/metrics')
+    let userId = getCookie('stellar_auth');
+    const response = axios.get('/api/Metrics/getMetricsData', {
+      params: {
+        access_token: userId
+      }
+    })
     return response;
   };
 
   render() {
-    const dataList = this.state.response.data
+    let dataList = undefined;
+    if (typeof this.state.response.data !== 'undefined' && this.state.response.data !== '') {
+      dataList = this.state.response.data.Metrics;
+    }
     const columns = [
       {
         Header: 'Business Unit',

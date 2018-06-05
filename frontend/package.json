@@ -7,16 +7,24 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
-    "material-ui": "^0.20.0",
+    "history": "4.7.2",
+    "moment": "2.22.1",
+    "node-sass-chokidar": "1.2.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-dropzone": "^3.10.0",
     "react-file-tree": "0.0.8",
+    "react-nouislider": "2.0.1",
     "react-router-dom": "^4.0.0",
-    "react-tap-event-plugin": "^3.0.2",
+    "react-slick": "0.23.1",
+    "react-swipeable-views": "0.12.13",
+    "prop-types": "latest",
+    "@material-ui/core": "latest",
+    "@material-ui/icons": "latest",
     "react-table": "^6.8.0",
-    "vis": "^4.21.0",
-    "superagent": "^3.4.4"
+    "react-tap-event-plugin": "^3.0.2",
+    "superagent": "^3.4.4",
+    "vis": "^4.21.0"
   },
   "scripts": {
     "start": "react-scripts start",
