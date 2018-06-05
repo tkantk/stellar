@@ -98,36 +98,55 @@ class Register extends Component {
         <MuiThemeProvider theme={theme}>
           <ButtonAppBar heading = "Register"/>
           <div>
-           <TextField
-             hintText="Enter your First Name"
-             floatingLabelText="First Name"
-             onChange = {(event,newValue) => this.setState({first_name:newValue})}
-             />
+          <TextField
+            required
+            id="required"
+            label="Enter your First Name"
+            placeholder="First Name"
+            className={classes.textField}
+            margin="normal"
+            onChange = {(event,newValue) => this.setState({first_name:newValue})}
+           />
            <br/>
            <TextField
-             hintText="Enter your Last Name"
-             floatingLabelText="Last Name"
-             onChange = {(event,newValue) => this.setState({last_name:newValue})}
-             />
+            required
+            id="required"
+            label="Enter your Last Name"
+            placeholder="Last Name"
+            className={classes.textField}
+            margin="normal"
+            onChange = {(event,newValue) => this.setState({last_name:newValue})}
+           />
            <br/>
            <TextField
-             hintText="Enter your User Name"
-             floatingLabelText="User Name"
-             onChange = {(event,newValue) => this.setState({user_name:newValue})}
-             />
+            required
+            id="required"
+            label="Enter your User Name"
+            placeholder="User Name"
+            className={classes.textField}
+            margin="normal"
+            onChange = {(event,newValue) => this.setState({user_name:newValue})}
+           />
            <br/>
            <TextField
-             hintText={userhintText}
-             floatingLabelText={userLabel}
-             onChange = {(event,newValue) => this.setState({email:newValue})}
-             />
+            required
+            id="required"
+            label={userhintText}
+            placeholder={userLabel}
+            className={classes.textField}
+            margin="normal"
+            onChange = {(event,newValue) => this.setState({email:newValue})}
+           />
            <br/>
-           <TextField
-             type = "password"
-             hintText="Enter your Password"
-             floatingLabelText="Password"
-             onChange = {(event,newValue) => this.setState({password:newValue})}
-             />
+          <TextField
+            id="password-input"
+            autoComplete="current-password"
+            margin="normal"
+            label="Enter your Password"
+            type="password"
+            className={classes.textField}
+            onChange = {(event,newValue) => this.setState({password:newValue})}
+            />
            <br/>
            <Button variant="raised" color="primary" label="Submit" primary={true} className={classes.button} onClick={(event) => this.handleClick(event)}>
             Submit
