@@ -109,7 +109,7 @@ module.exports = function (Metrics) {
       function(err, user) {
      ctx.req.userRole = user[0].role;
      console.log(user[0].role);
-     if (ctx.req.userRole!='admin'){
+     //if (ctx.req.userRole!='admin'){
 
     //Find all projects where user has access to  
     Metrics.app.models.ProjectConfiguration.find(
@@ -126,6 +126,8 @@ module.exports = function (Metrics) {
         
         console.log(projectNames);
         
+        // if (projectNames.find()
+        // {
       //find all metrics for projects where user has access to
      // Metrics.find( {where:{"Project":{in: projectNames}}},
      var metricsCollection = Metrics.getDataSource().connector.collection(Metrics.modelName);
@@ -156,18 +158,23 @@ module.exports = function (Metrics) {
           console.log(metricsData);
         cb(null, metricsData);        
       });
+    // }
+    // else
+    // {
+    //   cb(null,"`You are not authorized to access {proj} data`");
+    // }
     });      
-     }
-     else
-     {
-       console.log('User have admin role');
-      //return all metrics data
-       Metrics.find( {},
-       function(err, metricsData) {
-           console.log(metricsData); 
-         cb(null, metricsData);         
-       });       
-     }
+    //  }
+    //  else
+    //  {
+    //    console.log('User have admin role');
+    //   //return all metrics data
+    //    Metrics.find( {},
+    //    function(err, metricsData) {
+    //        console.log(metricsData); 
+    //      cb(null, metricsData);         
+    //    });       
+    //  }
       });
 
 
