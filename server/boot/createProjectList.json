@@ -1,8 +1,8 @@
 {
   "ProjectConfiguration": [
-    {"projectName": "MGM", "userId": "5b03fa162bdc7b3fb4e796bc", "accountName":"MGM"},
-    {"projectName": "Michelin", "userId": "5b03fa162bdc7b3fb4e796bd", "accountName":"Michelin"},
-    {"projectName": "LAKC", "userId": "5b03fa162bdc7b3fb4e796bd", "accountName":"Lord Abbett"}
+    {"projectName": "MGM", "userId": ["5b1ea712977b8a5174a6b075","5b1ea712977b8a5174a6b079"], "accountName":"MGM"},
+    {"projectName": "MICHELIN", "userId": ["5b1ea712977b8a5174a6b076","5b1ea712977b8a5174a6b079"], "accountName":"Michelin"},
+    {"projectName": "LAKC", "userId":["5b1ea712977b8a5174a6b074"], "accountName":"Lord Abbett"}
   ]
 }
 

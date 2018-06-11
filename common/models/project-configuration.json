@@ -13,10 +13,7 @@
       "required": true,
       "id":1
     },
-    "userId": {
-      "type": "string",
-      "required": true
-    },
+    
     "accountName": {
       "type": "string",
       "required": true
@@ -81,12 +78,12 @@
   },
   "validations": [],
   "relations": {
-    "userId": {
-      "type": "belongsTo",
+    "users": {
+      "type": "referencesMany",
       "model": "ApplicationUser",
       "foreignKey": "userId",
       "options": {
-        "disableInclude": true
+        "disableInclude": false
       }
     }
   },

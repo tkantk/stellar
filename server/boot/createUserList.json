@@ -1,7 +1,11 @@
 {
   "ApplicationUser": [
     {"username": "neha", "email": "nagupta@sapient.com", "password": "neha", "role":"admin", "firstName": "Neha","lastName": "Gupta","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["MGM"]},
-    {"username": "nehaMGM", "email": "ngupta56@sapient.com", "password": "nehaMGM", "role":"projectAdmin", "firstName": "Neha","lastName": "Gupta","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["MGM"]},
-    {"username": "nehaTigers", "email": "nehgupta0@publicisgroupe.net", "password": "nehaTigers", "role":"projectAdmin", "firstName": "Neha","lastName": "Gupta","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["MGM","Michelin"]}
+    {"username": "sachin", "email": "ssharma87@sapient.com", "password": "sachin", "role":"projectAdmin", "firstName": "Sachin","lastName": "Sharma","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["MGM"]},
+    {"username": "pratul", "email": "pchakravarty@sapient.com", "password": "pratul", "role":"projectAdmin", "firstName": "Pratul","lastName": "Chakravarty","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["MGM","Michelin"]},
+    {"username": "varun", "email": "vsodhi1@sapient.com", "password": "varun", "role":"projectAdmin", "firstName": "Varun","lastName": "Sodhi","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["Michelin"]},
+    {"username": "rajesh", "email": "rramachander@sapient.com", "password": "rajesh", "role":"admin", "firstName": "Rajesh","lastName": "Ramchander","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["MGM"]},
+    {"username": "nainan", "email": "nmarkose@sapient.com", "password": "nainan", "role":"admin", "firstName": "Nainan","lastName": "Markose","modifiedon": "2018-05-01T11:49:20.305Z","registeredon": "2017-11-01T11:49:20.305Z" , "location": "Bangalore", "projects":["MGM"]}
+
    ]
 }

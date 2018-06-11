@@ -56,8 +56,7 @@ module.exports = function (Metrics) {
      if (ctx.req.userRole!='admin'){
 
     //Find all projects where user has access to  
-    Metrics.app.models.ProjectConfiguration.find(
-      {where:{userId:`${userIdValue}`},},
+    Metrics.app.models.ProjectConfiguration.find({where: {"userId": `${userIdValue}`}},
          function(err, projectConfig) {
           console.log(projectConfig);
         ctx.req.projectConfig = projectConfig[0].projectName;
@@ -98,7 +97,7 @@ module.exports = function (Metrics) {
        next();
   }),
 
-  Metrics.calcMetrics = function (ctx, startDate, endDate, proj, cb) {
+  Metrics.calcMetrics = function (ctx, startDate, endDate, proj, category, cb) {
     console.log("calcMetrics method of metrics data is called");
     let flag =false;
     var userIdValue = ctx.req.accessToken.userId;
@@ -146,11 +145,15 @@ module.exports = function (Metrics) {
       [
           { $match: {$and:[{'Resolved On': { $gte: new Date( startDate ), $lte: new Date( endDate ) }
                     },
-                    {'Project':{$in: [proj]}}]}
+                    {'Project':{$in: [proj]}},
+                  {'Category':category}]}
           },
+           { $sort : { 'Priority' : -1 } },
       {
           $group: {
-            _id: {project: "$Project", priority:"$Priority"},count:{$sum:1},
+            _id: {project: "$Project", priority:"$Priority"},
+         
+            count:{$sum:1},
             
             avg: {
               $avg: "$Resolution Time"
@@ -162,8 +165,9 @@ module.exports = function (Metrics) {
               $max: "$Resolution Time"
             }
           },
+         
+          }
           
-          }			
       ],
      function(err, metricsData) {
           console.log(metricsData);
@@ -258,6 +262,7 @@ module.exports = function (Metrics) {
       {arg: 'startDate', type: 'date'},
       {arg: 'endDate', type: 'date'},
       {arg: 'proj', type: 'string'},
+      {arg: 'category', type: 'string'},
     ],
     http: {
       path: '/calcMetrics',
