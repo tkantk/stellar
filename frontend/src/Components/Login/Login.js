@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios';
 
 import UploadPage from '../Upload/UploadPage';
 import {createCookie} from '../../Utils/Cookie';
 import ButtonAppBar from '../AppBar/AppBar';
 import * as STELLAR_CONST from '../../Constants/StellarConstant';
+import MySnackbarContent from '../Snackbar/Snackbar';
 
 const theme = createMuiTheme();
 const styles = theme => ({
@@ -29,6 +31,13 @@ const styles = theme => ({
   },
   menu: {
     width: 200,
+  },
+  progress: {
+    margin: theme.spacing.unit * 2,
+  },
+  margin: {
+    marginTop: theme.spacing.unit,
+    margin: 'auto',
   },
 });
 
@@ -73,6 +82,7 @@ class Login extends Component {
       isLoggedIn:false,
       isLoginFailure:false,
       loginMessage:'',
+      error: [],
     }
   }
   componentWillMount(){
@@ -116,6 +126,7 @@ class Login extends Component {
       "username":this.state.username,
 	    "password":this.state.password
     }
+    const { classes } = this.props;
     axios.post(apiBaseUrl+'ApplicationUsers/login', payload)
    .then(function (response) {
      console.log(response.data.userId);
@@ -136,7 +147,24 @@ class Login extends Component {
      }
    })
    .catch(function (error) {
-     console.log(error);
+     if (error.response.data.error.statusCode === 401) {
+       let error_401 = [];
+       error_401.push(<MySnackbarContent
+        variant="error"
+        className={classes.margin}
+        message="Username password do not match"
+      />)
+      self.setState({error:error_401});
+      console.log("Username password do not match");
+     } else {
+      let error_gen = [];
+      error_gen.push(<MySnackbarContent
+       variant="error"
+       className={classes.margin}
+       message="Username does not exists"
+     />)
+     self.setState({error:error_gen});
+     }
    });
   }
 
@@ -150,9 +178,12 @@ class Login extends Component {
     return (
       <div>
         <MuiThemeProvider theme={theme}>
-        <ButtonAppBar heading = "Login" appContext={this.props.appContext}/>
+          <ButtonAppBar heading = "Login" appContext={this.props.appContext}/>
         </MuiThemeProvider>
-        {this.state.loginComponent}
+        <div>
+          {this.state.error}
+          {this.state.loginComponent}
+        </div>
       </div>
     );
   }

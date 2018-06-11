@@ -96,63 +96,67 @@ class Register extends Component {
     return (
       <div>
         <MuiThemeProvider theme={theme}>
-          <ButtonAppBar heading = "Register"/>
-          <div>
-          <TextField
-            required
-            id="required"
-            label="Enter your First Name"
-            placeholder="First Name"
-            className={classes.textField}
-            margin="normal"
-            onChange = {(event,newValue) => this.setState({first_name:newValue})}
-           />
-           <br/>
-           <TextField
-            required
-            id="required"
-            label="Enter your Last Name"
-            placeholder="Last Name"
-            className={classes.textField}
-            margin="normal"
-            onChange = {(event,newValue) => this.setState({last_name:newValue})}
-           />
-           <br/>
-           <TextField
-            required
-            id="required"
-            label="Enter your User Name"
-            placeholder="User Name"
-            className={classes.textField}
-            margin="normal"
-            onChange = {(event,newValue) => this.setState({user_name:newValue})}
-           />
-           <br/>
-           <TextField
-            required
-            id="required"
-            label={userhintText}
-            placeholder={userLabel}
-            className={classes.textField}
-            margin="normal"
-            onChange = {(event,newValue) => this.setState({email:newValue})}
-           />
-           <br/>
-          <TextField
-            id="password-input"
-            autoComplete="current-password"
-            margin="normal"
-            label="Enter your Password"
-            type="password"
-            className={classes.textField}
-            onChange = {(event,newValue) => this.setState({password:newValue})}
+          <ButtonAppBar appContext={this.props.appContext}/>
+        </MuiThemeProvider>
+        <div>
+          <MuiThemeProvider theme={theme}>
+            <div>
+            <TextField
+              required
+              id="required"
+              label="Enter your First Name"
+              placeholder="First Name"
+              className={classes.textField}
+              margin="normal"
+              onChange = {(event,newValue) => this.setState({first_name:newValue})}
             />
-           <br/>
-           <Button variant="raised" color="primary" label="Submit" primary={true} className={classes.button} onClick={(event) => this.handleClick(event)}>
-            Submit
-           </Button>
-          </div>
-         </MuiThemeProvider>
+            <br/>
+            <TextField
+              required
+              id="required"
+              label="Enter your Last Name"
+              placeholder="Last Name"
+              className={classes.textField}
+              margin="normal"
+              onChange = {(event,newValue) => this.setState({last_name:newValue})}
+            />
+            <br/>
+            <TextField
+              required
+              id="required"
+              label="Enter your User Name"
+              placeholder="User Name"
+              className={classes.textField}
+              margin="normal"
+              onChange = {(event,newValue) => this.setState({user_name:newValue})}
+            />
+            <br/>
+            <TextField
+              required
+              id="required"
+              label={userhintText}
+              placeholder={userLabel}
+              className={classes.textField}
+              margin="normal"
+              onChange = {(event,newValue) => this.setState({email:newValue})}
+            />
+            <br/>
+            <TextField
+              id="password-input"
+              autoComplete="current-password"
+              margin="normal"
+              label="Enter your Password"
+              type="password"
+              className={classes.textField}
+              onChange = {(event,newValue) => this.setState({password:newValue})}
+              />
+            <br/>
+            <Button variant="raised" color="primary" label="Submit" primary={true} className={classes.button} onClick={(event) => this.handleClick(event)}>
+              Submit
+            </Button>
+            </div>
+          </MuiThemeProvider>
+        </div>
       </div>
     );
   }
