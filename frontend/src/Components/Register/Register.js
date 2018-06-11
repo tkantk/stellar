@@ -96,7 +96,7 @@ class Register extends Component {
     return (
       <div>
         <MuiThemeProvider theme={theme}>
-          <ButtonAppBar appContext={this.props.appContext}/>
+          <ButtonAppBar heading="Register" appContext={this.props.appContext}/>
         </MuiThemeProvider>
         <div>
           <MuiThemeProvider theme={theme}>

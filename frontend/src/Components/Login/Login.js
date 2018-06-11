@@ -129,9 +129,7 @@ class Login extends Component {
     const { classes } = this.props;
     axios.post(apiBaseUrl+'ApplicationUsers/login', payload)
    .then(function (response) {
-     console.log(response.data.userId);
      if(response.status === 200){
-       console.log("Login successfull");
        let auth_cookie_value = response.data.id;
        createCookie(STELLAR_CONST.LOGIN_COOKIE, auth_cookie_value);
        createCookie(STELLAR_CONST.STATE_COOKIE, STELLAR_CONST.UPLOAD_STATE);
@@ -155,7 +153,6 @@ class Login extends Component {
         message="Username password do not match"
       />)
       self.setState({error:error_401});
-      console.log("Username password do not match");
      } else {
       let error_gen = [];
       error_gen.push(<MySnackbarContent

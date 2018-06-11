@@ -95,8 +95,12 @@ class ButtonAppBar extends Component {
       var payload={
         access_token: userId
       }
-      axios.post('/api/ApplicationUsers/logout', payload)
-     .then(function (response) {
+      axios.post('/api/ApplicationUsers/logout?access_token='+userId, payload, {
+        headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+        }
+      }).then(function (response) {
        console.log(response);
        if(response.data.code === 204){
         console.log("Logout successfull");

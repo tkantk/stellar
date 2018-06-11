@@ -58,20 +58,18 @@ class Dasboard_1 extends Component {
     }
   }
 
-  /*componentDidMount(){
-    this.callApi()
-      .then(res => this.createChart(res.data))
-      .catch(err => console.log(err));
-  }*/
-
+   pad(n) {
+     return n < 10 ? "0"+n : n;
+    }
+    
   callApi = async () => {
     let userId = getCookie('stellar_auth');
     var startDate = new Date(this.state.startDate);
     var endDate = new Date(this.state.endDate);
     const response = axios.get('/api/Metrics/calcMetrics', {
       params: {
-        startDate: startDate.toString("yyyy-MM-dd"),
-        endDate: endDate.toString("yyyy-MM-dd"),
+        startDate: startDate.getFullYear()+"-"+this.pad(startDate.getMonth()+1)+"-"+this.pad(startDate.getDate()),
+        endDate: endDate.getFullYear()+"-"+this.pad(endDate.getMonth()+1)+"-"+this.pad(endDate.getDate()),
         proj: this.state.project,
         access_token: userId
       }
