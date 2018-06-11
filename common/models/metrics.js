@@ -100,6 +100,7 @@ module.exports = function (Metrics) {
 
   Metrics.calcMetrics = function (ctx, startDate, endDate, proj, cb) {
     console.log("calcMetrics method of metrics data is called");
+    let flag =false;
     var userIdValue = ctx.req.accessToken.userId;
     console.log(`userid from request is ${userIdValue}`);
     
@@ -109,13 +110,17 @@ module.exports = function (Metrics) {
       function(err, user) {
      ctx.req.userRole = user[0].role;
      console.log(user[0].role);
-     //if (ctx.req.userRole!='admin'){
+    if (ctx.req.userRole=='admin'){
+      flag =true;
+    }
 
     //Find all projects where user has access to  
     Metrics.app.models.ProjectConfiguration.find(
       {where:{userId:`${userIdValue}`},},
          function(err, projectConfig) {
           console.log(projectConfig);
+          if (projectConfig.length>0)
+          {
         ctx.req.projectConfig = projectConfig[0].projectName;
         console.log(projectConfig[0]);
         var projectNames = [];
@@ -123,11 +128,17 @@ module.exports = function (Metrics) {
           console.log(project.projectName);
           projectNames.push(project.projectName);
         });
-        
         console.log(projectNames);
+        flag = projectNames.includes(proj);
+        console.log(`flag value is ${flag}`);
+      }
         
-        // if (projectNames.find()
-        // {
+        
+      
+       
+        
+        if( flag )
+         {
       //find all metrics for projects where user has access to
      // Metrics.find( {where:{"Project":{in: projectNames}}},
      var metricsCollection = Metrics.getDataSource().connector.collection(Metrics.modelName);
@@ -158,22 +169,50 @@ module.exports = function (Metrics) {
           console.log(metricsData);
         cb(null, metricsData);        
       });
-    // }
-    // else
-    // {
-    //   cb(null,"`You are not authorized to access {proj} data`");
-    // }
+    }
+    else
+    {
+      cb(null,`You are not authorized to access ${proj} data`);
+    }
     });      
-    //  }
+    // }
     //  else
     //  {
     //    console.log('User have admin role');
     //   //return all metrics data
-    //    Metrics.find( {},
-    //    function(err, metricsData) {
-    //        console.log(metricsData); 
-    //      cb(null, metricsData);         
-    //    });       
+    //   //  Metrics.find( {},
+    //   //  function(err, metricsData) {
+    //   //      console.log(metricsData); 
+    //   //    cb(null, metricsData);         
+    //   //  });  
+      
+    //   var metricsCollection = Metrics.getDataSource().connector.collection(Metrics.modelName);
+    //   metricsCollection.aggregate(
+    //    [
+    //        { $match: {'Resolved On': { $gte: new Date( startDate ), $lte: new Date( endDate ) }
+    //                  }}
+    //        },
+    //    {
+    //        $group: {
+    //          _id: {project: "$Project", priority:"$Priority"},count:{$sum:1},
+             
+    //          avg: {
+    //            $avg: "$Resolution Time"
+    //          },
+    //          min: {
+    //            $min: "$Resolution Time"
+    //          },
+    //          max: {
+    //            $max: "$Resolution Time"
+    //          }
+    //        },
+           
+    //        }			
+    //    ],
+    //   function(err, metricsData) {
+    //        console.log(metricsData);
+    //      cb(null, metricsData);        
+    //    });
     //  }
       });
 
