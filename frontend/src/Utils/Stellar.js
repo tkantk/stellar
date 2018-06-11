@@ -1,5 +1,6 @@
 import {getCookie} from './Cookie';
 import * as STELLAR_CONST from '../Constants/StellarConstant';
+import {deletCookie} from './Cookie';
 
 /**
  * get - Check if user is logged in
@@ -29,7 +30,17 @@ const getState = () => {
     return STELLAR_CONST.LOGIN_STATE;
 }
 
+/**
+ * Log Out User
+ */
+const logoutUser = () => {
+    deletCookie(STELLAR_CONST.LOGIN_COOKIE);
+    deletCookie(STELLAR_CONST.STATE_COOKIE);
+    window.location.reload();
+}
+
 export {
     isUserloggedIn,
-    getState
+    getState,
+    logoutUser
 };

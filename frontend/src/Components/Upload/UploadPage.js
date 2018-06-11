@@ -1,9 +1,33 @@
 import React from 'react';
 import axios from 'axios';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import PropTypes from 'prop-types';
+
+import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
 
 import UploadData from './UploadScreen';
 import ButtonAppBar from '../AppBar/AppBar';
+
+const theme = createMuiTheme();
+const styles = theme => ({
+    button: {
+      margin: theme.spacing.unit,
+    },
+    input: {
+      display: 'none',
+    },
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+      width: 200,
+    },
+    menu: {
+      width: 200,
+    },
+  });
 
 class FileUploadForm extends React.Component {
     constructor(props) {
@@ -32,25 +56,33 @@ class FileUploadForm extends React.Component {
     };
     
     render() {
-        const uploadstatus = this.state.status;  
-        console.log(this.state)
+      const uploadstatus = this.state.status;
       return (
-        <MuiThemeProvider>
+        <div>
+          <MuiThemeProvider theme={theme}>
             <ButtonAppBar heading = "Home" appContext={this.props.appContext}/>
+          </MuiThemeProvider>
           <div>
-              <form onSubmit={this.handleSubmit}>
-              <label>
-                  Select CSV File:
-                  <input type="file" id="file" onChange={this.handleChange} />
-              </label>
-              <input type="submit" value="Submit" />
-              </form>
-              <div>STATUS  :: {uploadstatus}</div>
-            <UploadData />
+            <MuiThemeProvider theme={theme}>
+                  <form onSubmit={this.handleSubmit}>
+                  <label>
+                      Select CSV File:
+                      <input type="file" id="file" onChange={this.handleChange} />
+                  </label>
+                  <input type="submit" value="Submit" />
+                  </form>
+                  <div>STATUS  :: {uploadstatus}</div>
+                <UploadData />
+            
+            </MuiThemeProvider>
           </div>
-        </MuiThemeProvider>
+        </div>
       );
     }
   }
 
-  export default FileUploadForm;
+  FileUploadForm.propTypes = {
+    classes: PropTypes.object.isRequired,
+  };
+  
+  export default withStyles(styles)(FileUploadForm);
