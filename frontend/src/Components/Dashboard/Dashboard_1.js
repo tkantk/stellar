@@ -11,8 +11,9 @@ import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import axios from 'axios';
 import * as Highcharts from "highcharts";
-import {getCookie} from '../../Utils/Cookie';
 
+import {getCookie} from '../../Utils/Cookie';
+import MySnackbarContent from '../Snackbar/Snackbar';
 import ButtonAppBar from '../AppBar/AppBar';
 
 const theme = createMuiTheme();
@@ -44,6 +45,11 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 200,
   },
+  margin: {
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+    margin: 'auto',
+  },
 });
 
 class Dasboard_1 extends Component {
@@ -55,6 +61,7 @@ class Dasboard_1 extends Component {
       project: 'MGM',
       startDate: "",
       endDate: "",
+      error: [],
     }
   }
 
@@ -171,11 +178,50 @@ handleChange = name => event => {
 };
 
 handleClick(event){
-  this.callApi()
-      .then(res => this.createChart(res.data))
-      .catch(err => console.log(err));
+  const { classes } = this.props;
+  if (this.checkFormData()) {
+    this.callApi()
+        .then(res => this.createChart(res.data))
+        .catch(err => {
+          let call_error = [];
+          call_error.push(<MySnackbarContent
+            variant="error"
+            className={classes.margin}
+            message="Error Occurred while getting data"
+          />)
+          this.setState({error:call_error});
+          console.log(err);
+        });
+  }
 }
 
+checkFormData() {
+  const { classes } = this.props;
+  if (this.state.startDate !== "" && this.state.endDate !== "") {
+    var startDate = new Date(this.state.startDate);
+    var endDate = new Date(this.state.endDate);
+    if (startDate < endDate) {
+      return true;
+    } else {
+      let date_error = [];
+      date_error.push(<MySnackbarContent
+        variant="error"
+        className={classes.margin}
+        message="Start Date cannot be before End Date"
+      />)
+      this.setState({error:date_error});
+    }
+  } else {
+    let mand_error = [];
+    mand_error.push(<MySnackbarContent
+        variant="error"
+        className={classes.margin}
+        message="All fields are mandatory"
+      />)
+      this.setState({error:mand_error});
+  }
+  return false;
+}
 
   render() {
     const { classes } = this.props;
@@ -187,6 +233,7 @@ handleClick(event){
         </MuiThemeProvider>
         <br/>
         <MuiThemeProvider theme={theme}>
+        {this.state.error}
         <form className={classes.container} autoComplete="off">
           <TextField
             id="startDate"
