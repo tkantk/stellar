@@ -181,7 +181,10 @@ handleClick(event){
   const { classes } = this.props;
   if (this.checkFormData()) {
     this.callApi()
-        .then(res => this.createChart(res.data))
+        .then(res => {
+          this.createChart(res.data);
+          this.setState({error:[]});
+        })
         .catch(err => {
           let call_error = [];
           call_error.push(<MySnackbarContent
