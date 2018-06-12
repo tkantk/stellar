@@ -69,7 +69,7 @@ class Dasboard_1 extends Component {
      return n < 10 ? "0"+n : n;
     }
 
-  callApi = async () => {
+  callApi = async (type) => {
     let userId = getCookie('stellar_auth');
     var startDate = new Date(this.state.startDate);
     var endDate = new Date(this.state.endDate);
@@ -78,23 +78,26 @@ class Dasboard_1 extends Component {
         startDate: startDate.getFullYear()+"-"+this.pad(startDate.getMonth()+1)+"-"+this.pad(startDate.getDate()),
         endDate: endDate.getFullYear()+"-"+this.pad(endDate.getMonth()+1)+"-"+this.pad(endDate.getDate()),
         proj: this.state.project,
-        access_token: userId
+        access_token: userId,
+        category: type
       }
     })
     return response;
   };
 
-  createChart(response) {
-    Highcharts.chart("Charts", this.createData(response));
+  createChart(response, type) {
+    if (response !== undefined && response.Metrics !== undefined && response.Metrics.length > 0) {
+      Highcharts.chart(type, this.createData(response, type));
+    }
   }
 
-  createData(response) {
+  createData(response, type) {
 
    let chart = {
       type: 'column'
    };
    let title = {
-      text: 'Metrics Calculated Data'   
+      text: 'Metrics Calculated Data For '+type
    };
    let subtitle = {
       text: 'Source: UCW Projects'  
@@ -180,9 +183,9 @@ handleChange = name => event => {
 handleClick(event){
   const { classes } = this.props;
   if (this.checkFormData()) {
-    this.callApi()
+    this.callApi('Incident')
         .then(res => {
-          this.createChart(res.data);
+          this.createChart(res.data, 'Incident');
           this.setState({error:[]});
         })
         .catch(err => {
@@ -195,6 +198,21 @@ handleClick(event){
           this.setState({error:call_error});
           console.log(err);
         });
+    this.callApi('Service Request')
+    .then(res => {
+      this.createChart(res.data, 'Service_Request');
+      this.setState({error:[]});
+    })
+    .catch(err => {
+      let call_error = [];
+      call_error.push(<MySnackbarContent
+        variant="error"
+        className={classes.margin}
+        message="Error Occurred while getting data"
+      />)
+      this.setState({error:call_error});
+      console.log(err);
+    });
   }
 }
 
@@ -271,7 +289,11 @@ checkFormData() {
            Submit
         </Button>
         </MuiThemeProvider>
-        <div id = "Charts" className = {classes.main}>
+        <div id = "Incident" className = {classes.main}>
+          
+        </div>
+        <br/>
+        <div id = "Service_Request" className = {classes.main}>
           
         </div>
       </div>
