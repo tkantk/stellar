@@ -88,6 +88,25 @@ class Dasboard_1 extends Component {
   createChart(response, type) {
     if (response !== undefined && response.Metrics !== undefined && response.Metrics.length > 0) {
       Highcharts.chart(type, this.createData(response, type));
+    } else {
+      Highcharts.chart(type, {
+        title: {
+            text: 'No data Found'
+        },
+        chart: {
+            type: 'column'
+        },
+        lang: {
+            noData: "No data Found"
+        },
+        noData: {
+            style: {
+                fontWeight: 'bold',
+                fontSize: '15px',
+                color: '#303030'
+            }
+        }
+    });
     }
   }
 
