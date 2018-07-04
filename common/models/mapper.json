@@ -35,6 +35,11 @@
     "type": "string"
   },
   {
+    "displayName": "Created On",
+    "access": "createdOn",
+    "type": "string"
+  },
+  {
     "displayName": "Resolved On",
     "access": "resolvedOn",
     "type": "string"

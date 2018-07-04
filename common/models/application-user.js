@@ -7,108 +7,112 @@ module.exports = function(ApplicationUser)
         if (context && context.result.id != undefined) {
           accessToken = context.result;
           console.log(accessToken.userId);
-          //console.log(projectList(accessToken.userId,next));
-let hw= "hello worls";
-          context.result.projects = hw;
-          //next(projectList(accessToken.userId))
-        //   var promise = new Promise(function(resolve, reject) {
-        //let abc =projectList(accessToken.userId);
-            
-        //        // console.log("resolved called")
-        //     resolve(abc);
-           
-        //   });
+                
+        let role;
+        let userRole = getUserRole(accessToken.userId);
+        Promise.resolve(userRole)
+          .then((results) => {
+            console.log(userRole);
+            results.forEach(function(result) {
+              console.log(`promise result is ${result} --> ${result.role}`);
+              //context.result.role = result.role;
+              role = result.role;
+                        
+          });
 
-        //   promise
-        Promise.resolve(projectList(accessToken.userId))
-          .then(function(result){
-              console.log(`promise result is ${result}`);
-              context.result.projects = result;
+        let projects = projectList(role,accessToken.userId);
+        Promise.resolve(projects)
+          .then((results) => {
+            console.log(projects);
+            results.forEach(function(result) {
+              console.log(`promise result is ${result} --> ${result.projects}`);
+              context.result.projects = result.projects;
               next();
-          }
-          , function(err){
-              console.log(err);
-          })
+                        
+          });
 
    
-        }
+        });
     });
-        
+    }
+});
+
+    /**
+     Get current user role
+
+     */
+
    
-    function projectList(userIdValue)
+     function getUserRole(userIdValue)
     {
         //find user role
         let promise = [];
-        let userRole;
-        let aa;
-        //var projectNames = [];
-        let zz= ApplicationUser.find(
-        {where:{id:`${userIdValue}`},}).then(function (results){
-        
-       userRole = results[0].role;
-       console.log(results[0].role);
+               
+        let userRole= ApplicationUser.find(
+        {where:{id:`${userIdValue}`},}).then(function (results){        
+              console.log(results[0].role);
+       return {
+         role: results[0].role
+        };
    
-       if (userRole!='admin'){
-  
-      //Find all projects where user has access to  
-      ApplicationUser.app.models.ProjectConfiguration.find(
-        {where:{userId:`${userIdValue}`},}).then(function(projectConfig) {
-            console.log(projectConfig);
-            var projectNames = [];
-          projectConfig.forEach(function(project){
-            console.log(project.projectName);
-            projectNames.push(project.projectName);
-          });
-          
-          console.log(projectNames);
-         return(projectNames);
-         
-});
-       }
-       else
-       {
-        console.log(`going in else block`);
-        Promise.resolve(projectNames()).then(
-            function(projects)
-            {
-                console.log(`project names are ${projects}`);
-                return (projects);
-            }
-        );
-        //promise.push(aa);
-         
-       
-       }
-       
-       //promise.push(aa);
-  
-    });  
-   
-     promise.push(zz);
-     return Promise.all(promise);
-       
-    }
-
-    function projectNames()
-    {     
-        let promise = [];
-        console.log(`going in else block`);
-        let pp = ApplicationUser.app.models.ProjectConfiguration.find({}).then(function (projectConfig){
-           
-        console.log(projectConfig);
-                let projectNames=[];
-        projectConfig.forEach(function(project){
-            console.log(project.projectName);
-            projectNames.push(project.projectName);
-            });
-        //console.log(projectNames(projectConfig, cb));
-        return (projectNames);
-
+    });
  
-        });
-        promise.push(pp);
-        return Promise.all(promise);
-
+promise.push(userRole);
+return Promise.all(promise);
+     
     }
+
+    /**
+     * Get project List given the user role and user ID
+     */
+
+    function projectList(userRole,userIdValue)
+    {
+        var projectNames = [];
+        let promise = [];
+        console.log(`in projectList method ${userRole}`);
+    if (userRole!='admin'){
+  
+        //Find all projects where user has access to  
+        let proj= ApplicationUser.app.models.ProjectConfiguration.find(
+          {where:{userId:`${userIdValue}`},}).then(function(projectConfig) {
+              console.log(projectConfig);
+          
+            projectConfig.forEach(function(project){
+              console.log(project.projectName);
+              projectNames.push(project.projectName);
+            });
+            
+            console.log(projectNames);
+            
+            return {
+              projects: projectNames
+                  };
+           
+  });
+  promise.push(proj);
+return Promise.all(promise);
+  
+         }
+         else
+         {
+          console.log(`going in else block`);      
+         
+          let proj = ApplicationUser.app.models.ProjectConfiguration.find({}).then(function (projectConfig){
+             
+              console.log(projectConfig);
+                     
+              projectConfig.forEach(function(project){
+                  console.log(project.projectName);
+                  projectNames.push(project.projectName);
+                  })
+                  return {
+                      projects: projectNames
+                          };
+         });
+     promise.push(proj);
+     return Promise.all(promise);
+      }
+ }
 
 }

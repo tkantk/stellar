@@ -72,7 +72,7 @@ module.exports = function (Metrics) {
       //find all metrics for projects where user has access to
       Metrics.find( {where:{"Project":{in: projectNames}}},
       function(err, metricsData) {
-          console.log(metricsData);
+          //console.log(metricsData);
         cb(null, metricsData);        
       });
     });      
@@ -83,7 +83,7 @@ module.exports = function (Metrics) {
       //return all metrics data
        Metrics.find( {},
        function(err, metricsData) {
-           console.log(metricsData); 
+           //console.log(metricsData); 
          cb(null, metricsData);         
        });       
      }
@@ -113,6 +113,7 @@ module.exports = function (Metrics) {
       flag =true;
     }
 
+    else{
     //Find all projects where user has access to  
     Metrics.app.models.ProjectConfiguration.find(
       {where:{userId:`${userIdValue}`},},
@@ -128,12 +129,28 @@ module.exports = function (Metrics) {
           projectNames.push(project.projectName);
         });
         console.log(projectNames);
-        flag = projectNames.includes(proj);
-        console.log(`flag value is ${flag}`);
-      }
-        
-        
+        //flag = projectNames.includes(proj);
+        flag = proj.every(function isPresent(name){
+          return (projectNames.includes(name));
+          
+        });
       
+        
+      }
+    
+    });
+  }
+      console.log(`flag value is ${flag}---- ${proj}`);
+        
+      if (startDate!=null)
+      {
+        var startDate1 = new Date(new Date().getFullYear,1,1);
+
+        var currentDate = new Date();
+        console.log(startDate1);
+        console.log(currentDate);
+
+      }
        
         
         if( flag )
@@ -218,10 +235,11 @@ module.exports = function (Metrics) {
     //      cb(null, metricsData);        
     //    });
     //  }
-      });
+       
 
 
-  };
+
+  }
 
   Metrics.remoteMethod('uploadExcel', {
     accepts: [{
