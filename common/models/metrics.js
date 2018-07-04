@@ -142,14 +142,23 @@ module.exports = function (Metrics) {
   }
       console.log(`flag value is ${flag}---- ${proj}`);
         
-      if (startDate!=null)
+      if (startDate==undefined)
       {
-        var startDate1 = new Date(new Date().getFullYear,1,1);
+        
+      var currentDate = new Date();
+       var startDate = new Date(currentDate.getFullYear(),0,1);
+     
+        console.log(startDate);
+      
 
-        var currentDate = new Date();
-        console.log(startDate1);
-        console.log(currentDate);
+      }
 
+      if (endDate==undefined)
+      {
+        console.log(endDate);
+        endDate = new Date();
+        console.log(endDate);
+       
       }
        
         
