@@ -6,7 +6,7 @@ import {
   defaultFont,
   primaryColor,
   primaryBoxShadow
-} from "assets/jss/material-kit-react.jsx";
+} from "../../../../assets/jss/material-kit-react.jsx";
 
 const customDropdownStyle = theme => ({
   popperClose: {

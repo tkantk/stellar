@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 
 import { mailFolderListItems, otherMailFolderListItems } from './tileData';
@@ -18,10 +19,11 @@ import { isUserloggedIn, getState } from '../../Utils/Stellar';
 import * as STELLAR_CONST from '../../Constants/StellarConstant';
 import {createCookie, deletCookie, getCookie} from '../../Utils/Cookie';
 import {logoutUser} from '../../Utils/Stellar';
-
+import { defaultFont } from "../../assets/jss/material-kit-react.jsx";
 import LoginScreen from '../Login/Loginscreen';
 import UploadPage from '../Upload/UploadPage';
 import Dashboard_1 from '../Dashboard/Dashboard_1';
+import CustomDropdown from '../CustomDropdown/CustomDropdown.jsx';
 
 const theme = createMuiTheme();
 const styles = theme => ({
@@ -35,11 +37,68 @@ const styles = theme => ({
     marginLeft: -12,
     marginRight: 20,
   },
-  list: {
-    width: 250,
-  },
   fullList: {
     width: 'auto',
+  },
+  list: {
+    ...defaultFont,
+    fontSize: "14px",
+    margin: 0,
+    paddingLeft: "0",
+    listStyle: "none",
+    paddingTop: "0",
+    paddingBottom: "0",
+    color: "inherit",
+  },
+  listItem: {
+    float: "left",
+    color: "inherit",
+    position: "relative",
+    display: "block",
+    width: "auto",
+    margin: "0",
+    padding: "0",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      "&:after": {
+        width: "calc(100% - 30px)",
+        content: '""',
+        display: "block",
+        height: "1px",
+        marginLeft: "15px",
+        backgroundColor: "#e5e5e5"
+      }
+    }
+  },
+  listItemText: {
+    padding: "0 !important"
+  },
+  navLink: {
+    color: "inherit",
+    position: "relative",
+    padding: "0.9375rem",
+    fontWeight: "400",
+    fontSize: "12px",
+    textTransform: "uppercase",
+    borderRadius: "3px",
+    lineHeight: "20px",
+    textDecoration: "none",
+    margin: "0px",
+    display: "inline-flex",
+    "&:hover,&:focus": {
+      color: "inherit",
+      background: "rgba(200, 200, 200, 0.2)"
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "calc(100% - 30px)",
+      marginLeft: "15px",
+      marginBottom: "8px",
+      marginTop: "8px",
+      textAlign: "left",
+      "& > span:first-child": {
+        justifyContent: "flex-start"
+      }
+    }
   },
 });
 
@@ -56,14 +115,9 @@ class ButtonAppBar extends Component {
       appBarLinks:localAppBarLinks,
       heading:"",
       left: false,
+
     }
   }
-
-  toggleDrawer = (side, open) => () => {
-    this.setState({
-      left: open,
-    });
-  };
 
   updateHeading(text) {
     this.setState({heading:text});
@@ -149,49 +203,50 @@ class ButtonAppBar extends Component {
 
   render() {
     const { classes } = this.props;
-    const sideList = (
-      <div className={classes.list}>
-        <List>{mailFolderListItems}</List>
-        <Divider />
-        <List>{otherMailFolderListItems}</List>
-      </div>
-    );
-
-    const fullList = (
-      <div className={classes.fullList}>
-        <List>{mailFolderListItems}</List>
-        <Divider />
-        <List>{otherMailFolderListItems}</List>
-      </div>
-    );
-   
+    let leftBar = null;
+    if (isUserloggedIn()) {
+      leftBar = (
+        <List>
+          <ListItem className={classes.listItem}>
+            <CustomDropdown
+              buttonText="MENU"
+              dropdownHeader="MENU"
+              buttonProps={{
+                className: classes.navLink,
+                color: "transparent"
+              }}
+              dropdownList={[
+                "Action",
+                "Another action",
+                "Something else here",
+                { divider: true },
+                "Separated link",
+                { divider: true },
+                "One more separated link"
+              ]}
+            />
+            </ListItem>
+        </List>
+      );
+    } else {
+      leftBar = (
+        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" >
+          <MenuIcon />
+        </IconButton>
+      );
+    }
     return (
-      <div>
-        <Drawer open={this.state.left} onClose={this.toggleDrawer('left', false)}>
-          <div
-            tabIndex={0}
-            role="button"
-            onClick={this.toggleDrawer('left', false)}
-            onKeyDown={this.toggleDrawer('left', false)}
-          >
-            {sideList}
-          </div>
-        </Drawer>
         <div className={classes.root}>
           <AppBar position="static">
             <Toolbar>
-              <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
-              onClick={this.toggleDrawer('left', true)}>
-                <MenuIcon />
-              </IconButton>
+              {leftBar}
               <Typography variant="title" color="inherit" className={classes.flex}>
                 {this.props.heading}
               </Typography>
-              {this.state.appBarLinks}
+              <Button color="inherit">Stellar</Button>
             </Toolbar>
           </AppBar>
         </div>
-      </div>
     );
   }
 }
