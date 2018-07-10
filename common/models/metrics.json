@@ -36,6 +36,10 @@
       "type": "string",
       "required": true
     },
+    "Created On": {
+      "type": "date",
+      "required": true
+    },
     "Resolved On": {
       "type": "date",
       "required": true
@@ -44,7 +48,15 @@
       "type": "number",
       "required": true
     },
+    "Response Efforts": {
+      "type": "number",
+      "required": true
+    },
     "Resolution Time": {
+      "type": "number",
+      "required": true
+    },
+    "Resolution Efforts": {
       "type": "number",
       "required": true
     }
