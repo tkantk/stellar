@@ -317,7 +317,7 @@ checkFormData() {
 }
 */
   render() {
-    const { classes } = this.props;
+    const { classes, theme } = this.props;
 
     return (
       <div>
@@ -355,7 +355,7 @@ checkFormData() {
             <Select
               multiple
               value={this.state.projects}
-              onChange={this.handleChange('project')}
+              onChange={this.handleChange('projects')}
               input={<Input id="select-multiple-checkbox" />}
               renderValue={selected => selected.join(', ')}
               MenuProps={MenuProps}
