@@ -325,10 +325,9 @@ checkFormData() {
           <ButtonAppBar heading = "Dashboard One" appContext={this.props.appContext}/>
         </MuiThemeProvider>
         <br/>
-        <div className={classes.container}>
         <MuiThemeProvider theme={theme}>
         {this.state.error}
-        <form autoComplete="off">
+        <form className={classes.container} autoComplete="off">
           <TextField
             id="startDate"
             label="Start Date"
@@ -349,7 +348,6 @@ checkFormData() {
               shrink: true,
             }}
           />
-          </form>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="select-multiple-checkbox">Project</InputLabel>
             <Select
@@ -368,9 +366,10 @@ checkFormData() {
               ))}
             </Select>
           </FormControl>
-        <Button variant="raised" label="Submit" color="primary" primary={true} className={classes.button} onClick={(event) => this.handleClick(event)}>
-           Submit
-        </Button>
+          </form>
+          <Button variant="raised" label="Submit" color="primary" primary={true} className={classes.button} onClick={(event) => this.handleClick(event)}>
+            Submit
+          </Button>
         </MuiThemeProvider>
         <div id = "Incident" className = {classes.main}>
           
@@ -378,7 +377,6 @@ checkFormData() {
         <br/>
         <div id = "Service_Request" className = {classes.main}>
           
-        </div>
         </div>
       </div>
     );
