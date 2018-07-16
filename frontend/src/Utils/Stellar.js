@@ -39,8 +39,22 @@ const logoutUser = () => {
     window.location.reload();
 }
 
+/**
+ * Get User Registered Projects
+ */
+const getProjectsAssigned = () => {
+    let projectCookie = getCookie(STELLAR_CONST.PROJECT_COOKIE);
+
+    if ((typeof projectCookie !== 'undefined') && (projectCookie !== '')) {
+        return projectCookie;
+    }
+    return '';
+}
+
 export {
     isUserloggedIn,
     getState,
-    logoutUser
+    logoutUser,
+    getProjectsAssigned
+
 };

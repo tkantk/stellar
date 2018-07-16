@@ -133,9 +133,10 @@ class Login extends Component {
        let auth_cookie_value = response.data.id;
        createCookie(STELLAR_CONST.LOGIN_COOKIE, auth_cookie_value);
        createCookie(STELLAR_CONST.STATE_COOKIE, STELLAR_CONST.UPLOAD_STATE);
+       //createCookie(STELLAR_CONST.PROJECT_COOKIE, response.data.projects);
        var uploadScreen=[];
        uploadScreen.push(<UploadPage appContext={self.props.appContext}/>)
-       self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen, dashboard:[]})
+       self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen, dashboard:[], projects:response.data.projects})
      }
      else if(response.status === 401){
        console.log("Username password do not match");

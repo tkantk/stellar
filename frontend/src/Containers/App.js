@@ -49,6 +49,7 @@ class App extends Component {
       loginPage:[],
       uploadScreen:[],
       dashboard_1:[],
+      projects:[],
     }
   }
   componentWillMount(){
