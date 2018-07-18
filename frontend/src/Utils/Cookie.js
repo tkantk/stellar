@@ -64,9 +64,33 @@ const createCookie = (key, value, expiryDays = 90) => {
     return false;
 }
 
+/**
+ * get - Retrieve the Project cookie value
+ *
+ * @param   {string} key   keyname of the cookie
+ * @returns {array}        returns an array containing the values
+ */
+const getProjectCookie = ( key ) => {
+
+    if ((typeof window !== 'undefined')&& (typeof document !== 'undefined')) {
+        let cookieSet = document.cookie.split('; '),
+            cookieArray = cookieSet.filter((cookie) => {
+                return cookie.indexOf(`${key}=`) === 0;
+            }),
+            cookie = cookieArray[0];
+
+        return cookie ?
+            cookie.split(`${key}=`)[1] !== '' ?
+            cookie.split(`${key}=`)[1].replace(/(^[,\s]+)|([,\s]+$)/g, '').split(',') : '' : '';
+    }
+
+    return '';
+}
+
 
 export {
     createCookie,
     getCookie,
-    deletCookie
+    deletCookie,
+    getProjectCookie,
 };

@@ -36,6 +36,7 @@ const getState = () => {
 const logoutUser = () => {
     deletCookie(STELLAR_CONST.LOGIN_COOKIE);
     deletCookie(STELLAR_CONST.STATE_COOKIE);
+    deletCookie(STELLAR_CONST.PROJECT_COOKIE);
     window.location.reload();
 }
 

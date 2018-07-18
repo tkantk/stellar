@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
+import { createMuiTheme, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -16,12 +16,13 @@ import Divider from '@material-ui/core/Divider';
 import { mailFolderListItems, otherMailFolderListItems } from './tileData';
 import { isUserloggedIn, getState } from '../../Utils/Stellar';
 import * as STELLAR_CONST from '../../Constants/StellarConstant';
-import {createCookie, deletCookie, getCookie} from '../../Utils/Cookie';
+import {createCookie, getCookie} from '../../Utils/Cookie';
 import {logoutUser} from '../../Utils/Stellar';
 
 import LoginScreen from '../Login/Loginscreen';
 import UploadPage from '../Upload/UploadPage';
 import Dashboard_1 from '../Dashboard/Dashboard_1';
+import Dashboard_2 from '../Dashboard/Dashboard_2';
 
 const theme = createMuiTheme();
 const styles = theme => ({
@@ -53,6 +54,7 @@ class ButtonAppBar extends Component {
       loginComponent:[],
       uploadScreen:[],
       dashboard_1:[],
+      dashboard_2:[],
       appBarLinks:localAppBarLinks,
       heading:"",
       left: false,
@@ -70,16 +72,25 @@ class ButtonAppBar extends Component {
   }
 
   componentWillMount(){
-    const { classes } = this.props;
     var localAppBarLinks=[];
     var rightText = isUserloggedIn() ? "Logout" : "Stellar";
     if (isUserloggedIn()) {
-      if (getState() !== STELLAR_CONST.UPLOAD_STATE) {
+      if (getState() === STELLAR_CONST.UPLOAD_STATE) {
+        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_1_STATE)}>Dashboard One</Button>
+        )
+        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_2_STATE)}>Dashboard Two</Button>
+        )
+      }
+      if (getState() === STELLAR_CONST.DASHBOARD_1_STATE) {
+        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_2_STATE)}>Dashboard Two</Button>
+        )
         localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.UPLOAD_STATE)}>Upload Page</Button>
         )
       }
-      if (getState() !== STELLAR_CONST.DASHBOARD_1_STATE) {
+      if (getState() === STELLAR_CONST.DASHBOARD_2_STATE) {
         localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_1_STATE)}>Dashboard One</Button>
+        )
+        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.UPLOAD_STATE)}>Upload Page</Button>
         )
       }
     }
@@ -126,7 +137,7 @@ class ButtonAppBar extends Component {
       createCookie(STELLAR_CONST.STATE_COOKIE, STELLAR_CONST.LOGIN_STATE);
       this.updateHeading("Login");
       self.props.appContext.setState({
-                    loginPage:loginPage, uploadScreen:[], dashboard_1:[]
+                    loginPage:loginPage, uploadScreen:[], dashboard_1:[], dashboard_2:[],
                       })
     } else if (state === STELLAR_CONST.UPLOAD_STATE) {
       var uploadScreen =[];
@@ -134,7 +145,7 @@ class ButtonAppBar extends Component {
       createCookie(STELLAR_CONST.STATE_COOKIE, STELLAR_CONST.UPLOAD_STATE);
       this.updateHeading("Home");
       self.props.appContext.setState({
-                    loginPage:[], uploadScreen:uploadScreen, dashboard_1:[]
+                    loginPage:[], uploadScreen:uploadScreen, dashboard_1:[], dashboard_2:[],
                       })
     } else if (state === STELLAR_CONST.DASHBOARD_1_STATE) {
       var dashboard_1 =[];
@@ -142,7 +153,15 @@ class ButtonAppBar extends Component {
       createCookie(STELLAR_CONST.STATE_COOKIE, STELLAR_CONST.DASHBOARD_1_STATE);
       this.updateHeading("Dashboard One");
       self.props.appContext.setState({
-                    loginPage:[], uploadScreen:[], dashboard_1:dashboard_1
+                    loginPage:[], uploadScreen:[], dashboard_1:dashboard_1, dashboard_2:[],
+                      })
+    } else if (state === STELLAR_CONST.DASHBOARD_2_STATE) {
+      var dashboard_2 =[];
+      dashboard_2.push(<Dashboard_2 appContext={self.props.appContext}/>);
+      createCookie(STELLAR_CONST.STATE_COOKIE, STELLAR_CONST.DASHBOARD_2_STATE);
+      this.updateHeading("Dashboard Two");
+      self.props.appContext.setState({
+                    loginPage:[], uploadScreen:[], dashboard_2:dashboard_2, dashboard_1:[],
                       })
     } 
   }
@@ -151,14 +170,6 @@ class ButtonAppBar extends Component {
     const { classes } = this.props;
     const sideList = (
       <div className={classes.list}>
-        <List>{mailFolderListItems}</List>
-        <Divider />
-        <List>{otherMailFolderListItems}</List>
-      </div>
-    );
-
-    const fullList = (
-      <div className={classes.fullList}>
         <List>{mailFolderListItems}</List>
         <Divider />
         <List>{otherMailFolderListItems}</List>

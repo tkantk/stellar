@@ -10,7 +10,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import Checkbox from '@material-ui/core/Checkbox';
-import Chip from '@material-ui/core/Chip';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import axios from 'axios';
@@ -19,7 +18,8 @@ import * as Highcharts from "highcharts";
 import {getCookie} from '../../Utils/Cookie';
 import MySnackbarContent from '../Snackbar/Snackbar';
 import ButtonAppBar from '../AppBar/AppBar';
-import {getProjectsAssigned} from '../../Utils/Stellar';
+import * as STELLAR_CONST from '../../Constants/StellarConstant';
+import {getCountSeries, getAvgSeries, getXAxis} from '../../Utils/seriesUtil';
 
 const theme = createMuiTheme();
 const styles = theme => ({
@@ -79,15 +79,18 @@ class Dasboard_1 extends Component {
   constructor(props){
     super(props);
     const { classes } = props;
-    this.state={
-      seriesCategories: ['count', 'avg', 'min', 'max'],
-      startDate: "",
-      endDate: "",
-      error: [],
-      monthInterval: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JULY', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-      projects: props.appContext.state.projects,
-    }
   }
+
+  state={
+    startDate: "",
+    endDate: "",
+    error: [],
+    projects: this.props.appContext.state.projects,
+    selectedGroup: "",
+    filter: "Resolved On",
+    [`metricsData${STELLAR_CONST.INCIDENT}`]: [],
+    [`metricsData${STELLAR_CONST.SERVICE_REQUEST}`]:  [],
+  };
 
    pad(n) {
      return n < 10 ? "0"+n : n;
@@ -145,7 +148,7 @@ class Dasboard_1 extends Component {
    let subtitle = {
       text: 'Source: UCW Projects'  
    };
-   let xAxis = this.getXAxis(response);
+   let xAxis = getXAxis(response, this.state.filter);
 
    let yAxis = {
       min: 0,
@@ -170,9 +173,15 @@ class Dasboard_1 extends Component {
    let credits = {
       enabled: false
    };
-   let series= this.getSeries(response, xAxis);
-
-   var json = {};   
+   let series= [];
+   let resKey = "metricsData"+type;
+   if (this.state.selectedGroup === STELLAR_CONST.COUNT) {
+    series = getCountSeries(this.state[resKey], xAxis, this.state.filter, this.state.projects);
+   } else if (this.state.selectedGroup === STELLAR_CONST.AVG) {
+    series = getAvgSeries(this.state[resKey], xAxis, this.state.filter, this.state.projects);
+   }
+   
+   let json = {};   
    json.chart = chart; 
    json.title = title;   
    json.subtitle = subtitle; 
@@ -185,79 +194,40 @@ class Dasboard_1 extends Component {
     return json;
   }
 
-  getXAxis(response) {
-   let xAxixObj = {};
-   let categories = [];
-   let responseArray = response.Metrics;
-   responseArray.sort(this.date_sort_asc);
-   for (let i = 0; i < responseArray.length; i++) {
-    let resolvedOn = new Date(responseArray[i]["Resolved On"]);
-    let resolvedOnMonth = this.state.monthInterval[resolvedOn.getMonth()];
-    let resolvedYear = resolvedOn.getFullYear();
-    let categoryObj = resolvedOnMonth+" - "+resolvedYear;
-    if (categories.indexOf(categoryObj) === -1) {
-      categories.push(categoryObj);
-    }
-   }
-   xAxixObj = {
-     "categories": categories,
-     "crosshair": true
-   };
-   return xAxixObj;
-   }
-
-  date_sort_asc = function (obj1, obj2) {
-    let obj1Date = new Date(obj1["Resolved On"]);
-    let obj2Date = new Date(obj2["Resolved On"]);
-    if (obj1Date > obj2Date) return 1;
-    if (obj1Date < obj2Date) return -1;
-    return 0;
-  };
-
-  getSeries(response, xAxis) {
-    let series = [];
-    let projects = this.state.projects;
-    for (let i=0; i < projects.length; i++) {
-      let name = projects[i];
-      let data = [];
-      for (let h = 0; h < xAxis.categories.length; h++) {
-        let monthYear = xAxis.categories[h];
-        let count = 0;
-        for(let j=0;j<response.Metrics.length;j++) {
-          let obj = response.Metrics[j];
-          if (obj.Account === name) {
-            let resolvedOn = new Date(obj["Resolved On"]);
-            let resolvedOnMonth = this.state.monthInterval[resolvedOn.getMonth()];
-            let resolvedYear = resolvedOn.getFullYear();
-            let resolvedObj = resolvedOnMonth+" - "+resolvedYear;
-            if ((resolvedObj === monthYear)) {
-              count++;
-            }
-          }
-        }
-        data.push(count);
-      }
-      let seriesData = {
-        "name": name,
-        "data": data
-      };
-      series.push(seriesData);
-    }
-    return series;
-}
-
 handleChange = name => event => {
   this.setState({
     [name]: event.target.value,
   });
-};
+}
 
-handleClick(event){
+changeGroup = event => {
+  this.setState({
+    selectedGroup: event.target.value}, () => {
+      let incidentResKey = "metricsData"+STELLAR_CONST.INCIDENT;
+      if (this.state[incidentResKey] !== undefined && this.state[incidentResKey].Metrics.length > 0) {
+        this.createChart(this.state[incidentResKey], STELLAR_CONST.INCIDENT);
+      }
+      let serviceReqResKey = "metricsData"+STELLAR_CONST.SERVICE_REQUEST;
+      if (this.state[serviceReqResKey] !== undefined && this.state[serviceReqResKey].Metrics.length > 0) {
+        this.createChart(this.state[serviceReqResKey], STELLAR_CONST.SERVICE_REQUEST);
+      }
+    });
+}
+
+handleClick(event) {
   const { classes } = this.props;
-  /*if (this.checkFormData()) {*/
-    this.callApi('Incident')
+  if (this.state.selectedGroup === "") {
+    this.setState({
+      selectedGroup: STELLAR_CONST.COUNT,
+    });
+  }
+    this.callApi(STELLAR_CONST.INCIDENT)
         .then(res => {
-          this.createChart(res.data, 'Incident');
+          let incidentResKey = "metricsData"+STELLAR_CONST.INCIDENT;
+          this.setState({
+            [incidentResKey]: res.data
+          });
+          this.createChart(res.data, STELLAR_CONST.INCIDENT);
           this.setState({error:[]});
         })
         .catch(err => {
@@ -271,54 +241,28 @@ handleClick(event){
           console.log(err);
         });
     this.callApi('Service Request')
-    .then(res => {
-      this.createChart(res.data, 'Service_Request');
-      this.setState({error:[]});
-    })
-    .catch(err => {
-      let call_error = [];
-      call_error.push(<MySnackbarContent
-        variant="error"
-        className={classes.margin}
-        message="Error Occurred while getting data"
-      />)
-      this.setState({error:call_error});
-      console.log(err);
-    });
-  /*}*/
-}
-/*
-checkFormData() {
-  const { classes } = this.props;
-  if (this.state.startDate !== "" && this.state.endDate !== "") {
-    var startDate = new Date(this.state.startDate);
-    var endDate = new Date(this.state.endDate);
-    if (startDate < endDate) {
-      return true;
-    } else {
-      let date_error = [];
-      date_error.push(<MySnackbarContent
-        variant="error"
-        className={classes.margin}
-        message="Start Date cannot be before End Date"
-      />)
-      this.setState({error:date_error});
-    }
-  } else {
-    let mand_error = [];
-    mand_error.push(<MySnackbarContent
-        variant="error"
-        className={classes.margin}
-        message="All fields are mandatory"
-      />)
-      this.setState({error:mand_error});
+      .then(res => {
+        let serviceReqResKey = "metricsData"+STELLAR_CONST.SERVICE_REQUEST;
+            this.setState({
+              [serviceReqResKey]: res.data
+            });
+        this.createChart(res.data, STELLAR_CONST.SERVICE_REQUEST);
+        this.setState({error:[]});
+      })
+      .catch(err => {
+        let call_error = [];
+        call_error.push(<MySnackbarContent
+          variant="error"
+          className={classes.margin}
+          message="Error Occurred while getting data"
+        />)
+        this.setState({error:call_error});
+        console.log(err);
+      });
   }
-  return false;
-}
-*/
+
   render() {
     const { classes, theme } = this.props;
-
     return (
       <div>
         <MuiThemeProvider theme={theme}>
@@ -365,6 +309,18 @@ checkFormData() {
                 </MenuItem>
               ))}
             </Select>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor='project-drop'>Select Project</InputLabel>
+            <NativeSelect 
+              defaultValue={STELLAR_CONST.COUNT} 
+              onChange={(event) => { this.changeGroup(event)}}
+              input={<Input id="project-drop" />}
+            >
+            {STELLAR_CONST.GROUPS.map(group => (
+                <option value={group}>{group}</option>
+              ))}
+            </NativeSelect>
           </FormControl>
           </form>
           <Button variant="raised" label="Submit" color="primary" primary={true} className={classes.button} onClick={(event) => this.handleClick(event)}>
