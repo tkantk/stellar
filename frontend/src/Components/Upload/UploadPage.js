@@ -10,6 +10,7 @@ import UploadData from './UploadScreen';
 import ButtonAppBar from '../AppBar/AppBar';
 import MySnackbarContent from '../Snackbar/Snackbar';
 import {getCookie} from '../../Utils/Cookie';
+import {logoutUser} from '../../Utils/Stellar';
 import typographyStyle from '../../assets/jss/material-kit-react/views/componentsSections/typographyStyle.jsx';
 
 const theme = createMuiTheme();
@@ -79,13 +80,17 @@ class FileUploadForm extends React.Component {
             this.setState({uploadSuccess:success});
         }).catch(err => {
           console.log(err);
-          let error = [];
-          error.push(<MySnackbarContent
-            variant="error"
-            className={classes.margin}
-            message="File Upload Error"
-          />)
-          this.setState({uploadSuccess:error});
+          if (err.response.status === 500 || err.response.data.error.statusCode === 401) {
+            logoutUser();
+          } else {
+            let error = [];
+            error.push(<MySnackbarContent
+              variant="error"
+              className={classes.margin}
+              message="File Upload Error"
+            />)
+            this.setState({uploadSuccess:error});
+          }
         })
     };
     
@@ -94,7 +99,7 @@ class FileUploadForm extends React.Component {
       return (
         <div>
           <MuiThemeProvider theme={theme}>
-            <ButtonAppBar heading = "Home" appContext={this.props.appContext}/>
+            <ButtonAppBar heading = "Upload Metrics" appContext={this.props.appContext}/>
           </MuiThemeProvider>
           <div>
             <MuiThemeProvider theme={theme}>

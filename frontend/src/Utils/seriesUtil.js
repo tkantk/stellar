@@ -1,6 +1,6 @@
 import * as STELLAR_CONST from '../Constants/StellarConstant';
 
-const getCountSeries = (response, xAxis, filter, projects) => {
+const getCountSeries = (response, xAxis, filter, projects, priority) => {
     let series = [];
     for (let i=0; i < projects.length; i++) {
       let name = projects[i];
@@ -15,7 +15,7 @@ const getCountSeries = (response, xAxis, filter, projects) => {
             let resolvedOnMonth = STELLAR_CONST.MONTH_INTERVAL[resolvedOn.getMonth()];
             let resolvedYear = resolvedOn.getFullYear();
             let resolvedObj = resolvedOnMonth+" - "+resolvedYear;
-            if ((resolvedObj === monthYear)) {
+            if (resolvedObj === monthYear && (priority === "0" || obj.Priority === priority)) {
               count++;
             }
           }
@@ -74,7 +74,7 @@ const getLineSeries = (response, xAxis, project) => {
   return series;
 }
 
-const getAvgSeries = (response, xAxis, filter, projects) => {
+const getAvgSeries = (response, xAxis, filter, projects, priority) => {
     let series = [];
     for (let i=0; i < projects.length; i++) {
       let name = projects[i];
@@ -90,7 +90,7 @@ const getAvgSeries = (response, xAxis, filter, projects) => {
             let resolvedOnMonth = STELLAR_CONST.MONTH_INTERVAL[resolvedOn.getMonth()];
             let resolvedYear = resolvedOn.getFullYear();
             let resolvedObj = resolvedOnMonth+" - "+resolvedYear;
-            if ((resolvedObj === monthYear)) {
+            if (resolvedObj === monthYear  && (priority === "0" || obj.Priority === priority)) {
               count++;
               totalValue += obj["Resolution Efforts"];
             }

@@ -76,21 +76,21 @@ class ButtonAppBar extends Component {
     var rightText = isUserloggedIn() ? "Logout" : "Stellar";
     if (isUserloggedIn()) {
       if (getState() === STELLAR_CONST.UPLOAD_STATE) {
-        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_1_STATE)}>Dashboard One</Button>
+        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_1_STATE)}>Metrics Summary</Button>
         )
-        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_2_STATE)}>Dashboard Two</Button>
+        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_2_STATE)}>Ticket velocity</Button>
         )
       }
       if (getState() === STELLAR_CONST.DASHBOARD_1_STATE) {
-        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_2_STATE)}>Dashboard Two</Button>
+        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_2_STATE)}>Ticket velocity</Button>
         )
-        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.UPLOAD_STATE)}>Upload Page</Button>
+        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.UPLOAD_STATE)}>Upload Metrics</Button>
         )
       }
       if (getState() === STELLAR_CONST.DASHBOARD_2_STATE) {
         localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.DASHBOARD_1_STATE)}>Dashboard One</Button>
         )
-        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.UPLOAD_STATE)}>Upload Page</Button>
+        localAppBarLinks.push(<Button color="inherit"  onClick={(event) => this.handleRoute(event, STELLAR_CONST.UPLOAD_STATE)}>Upload Metrics</Button>
         )
       }
     }
@@ -143,7 +143,7 @@ class ButtonAppBar extends Component {
       var uploadScreen =[];
       uploadScreen.push(<UploadPage appContext={self.props.appContext}/>);
       createCookie(STELLAR_CONST.STATE_COOKIE, STELLAR_CONST.UPLOAD_STATE);
-      this.updateHeading("Home");
+      this.updateHeading("Upload Metrics");
       self.props.appContext.setState({
                     loginPage:[], uploadScreen:uploadScreen, dashboard_1:[], dashboard_2:[],
                       })
@@ -151,7 +151,7 @@ class ButtonAppBar extends Component {
       var dashboard_1 =[];
       dashboard_1.push(<Dashboard_1 appContext={self.props.appContext}/>);
       createCookie(STELLAR_CONST.STATE_COOKIE, STELLAR_CONST.DASHBOARD_1_STATE);
-      this.updateHeading("Dashboard One");
+      this.updateHeading("Metrics Summary");
       self.props.appContext.setState({
                     loginPage:[], uploadScreen:[], dashboard_1:dashboard_1, dashboard_2:[],
                       })
@@ -159,7 +159,7 @@ class ButtonAppBar extends Component {
       var dashboard_2 =[];
       dashboard_2.push(<Dashboard_2 appContext={self.props.appContext}/>);
       createCookie(STELLAR_CONST.STATE_COOKIE, STELLAR_CONST.DASHBOARD_2_STATE);
-      this.updateHeading("Dashboard Two");
+      this.updateHeading("Ticket velocity");
       self.props.appContext.setState({
                     loginPage:[], uploadScreen:[], dashboard_2:dashboard_2, dashboard_1:[],
                       })

@@ -18,6 +18,7 @@ import * as Highcharts from "highcharts";
 import {getCookie} from '../../Utils/Cookie';
 import MySnackbarContent from '../Snackbar/Snackbar';
 import ButtonAppBar from '../AppBar/AppBar';
+import {logoutUser} from '../../Utils/Stellar';
 import * as STELLAR_CONST from '../../Constants/StellarConstant';
 import {getCountSeries, getAvgSeries, getXAxis} from '../../Utils/seriesUtil';
 
@@ -90,6 +91,7 @@ class Dasboard_1 extends Component {
     filter: "Resolved On",
     [`metricsData${STELLAR_CONST.INCIDENT}`]: [],
     [`metricsData${STELLAR_CONST.SERVICE_REQUEST}`]:  [],
+    priority: "0",
   };
 
    pad(n) {
@@ -176,9 +178,9 @@ class Dasboard_1 extends Component {
    let series= [];
    let resKey = "metricsData"+type;
    if (this.state.selectedGroup === STELLAR_CONST.COUNT) {
-    series = getCountSeries(this.state[resKey], xAxis, this.state.filter, this.state.projects);
+    series = getCountSeries(this.state[resKey], xAxis, this.state.filter, this.state.projects, this.state.priority);
    } else if (this.state.selectedGroup === STELLAR_CONST.AVG) {
-    series = getAvgSeries(this.state[resKey], xAxis, this.state.filter, this.state.projects);
+    series = getAvgSeries(this.state[resKey], xAxis, this.state.filter, this.state.projects, this.state.priority);
    }
    
    let json = {};   
@@ -214,6 +216,20 @@ changeGroup = event => {
     });
 }
 
+changePriority = event => {
+  this.setState({
+    priority: event.target.value}, () => {
+      let incidentResKey = "metricsData"+STELLAR_CONST.INCIDENT;
+      if (this.state[incidentResKey] !== undefined && this.state[incidentResKey].Metrics.length > 0) {
+        this.createChart(this.state[incidentResKey], STELLAR_CONST.INCIDENT);
+      }
+      let serviceReqResKey = "metricsData"+STELLAR_CONST.SERVICE_REQUEST;
+      if (this.state[serviceReqResKey] !== undefined && this.state[serviceReqResKey].Metrics.length > 0) {
+        this.createChart(this.state[serviceReqResKey], STELLAR_CONST.SERVICE_REQUEST);
+      }
+  });
+}
+
 handleClick(event) {
   const { classes } = this.props;
   if (this.state.selectedGroup === "") {
@@ -231,13 +247,17 @@ handleClick(event) {
           this.setState({error:[]});
         })
         .catch(err => {
-          let call_error = [];
-          call_error.push(<MySnackbarContent
-            variant="error"
-            className={classes.margin}
-            message="Error Occurred while getting data"
-          />)
-          this.setState({error:call_error});
+          if (err.response.status === 500 || err.response.data.error.statusCode === 401) {
+            logoutUser();
+          } else {
+            let call_error = [];
+            call_error.push(<MySnackbarContent
+              variant="error"
+              className={classes.margin}
+              message="Error Occurred while getting data"
+            />)
+            this.setState({error:call_error});
+          }
           console.log(err);
         });
     this.callApi('Service Request')
@@ -250,13 +270,17 @@ handleClick(event) {
         this.setState({error:[]});
       })
       .catch(err => {
-        let call_error = [];
-        call_error.push(<MySnackbarContent
-          variant="error"
-          className={classes.margin}
-          message="Error Occurred while getting data"
-        />)
-        this.setState({error:call_error});
+        if (err.response.status === 500 || err.response.data.error.statusCode === 401) {
+            logoutUser();
+        } else {
+          let call_error = [];
+          call_error.push(<MySnackbarContent
+            variant="error"
+            className={classes.margin}
+            message="Error Occurred while getting data"
+          />)
+          this.setState({error:call_error});
+        }
         console.log(err);
       });
   }
@@ -266,7 +290,7 @@ handleClick(event) {
     return (
       <div>
         <MuiThemeProvider theme={theme}>
-          <ButtonAppBar heading = "Dashboard One" appContext={this.props.appContext}/>
+          <ButtonAppBar heading = "Metrics Summary" appContext={this.props.appContext}/>
         </MuiThemeProvider>
         <br/>
         <MuiThemeProvider theme={theme}>
@@ -320,6 +344,21 @@ handleClick(event) {
             {STELLAR_CONST.GROUPS.map(group => (
                 <option value={group}>{group}</option>
               ))}
+            </NativeSelect>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor='priority'>Priority</InputLabel>
+            <NativeSelect 
+              defaultValue={STELLAR_CONST.COUNT} 
+              onChange={(event) => { this.changePriority(event)}}
+              input={<Input id="priority" />}
+            >
+            <option value='0'>ALL</option>
+            <option value='1'>P1</option>
+            <option value='2'>P2</option>
+            <option value='3'>P3</option>
+            <option value='4'>P4</option>
+            <option value='5'>P5</option>
             </NativeSelect>
           </FormControl>
           </form>

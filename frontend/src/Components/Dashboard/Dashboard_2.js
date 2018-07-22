@@ -17,6 +17,7 @@ import * as Highcharts from "highcharts";
 import {getCookie} from '../../Utils/Cookie';
 import MySnackbarContent from '../Snackbar/Snackbar';
 import ButtonAppBar from '../AppBar/AppBar';
+import {logoutUser} from '../../Utils/Stellar';
 import * as STELLAR_CONST from '../../Constants/StellarConstant';
 import {getXAxis, getLineSeries} from '../../Utils/seriesUtil';
 
@@ -125,7 +126,6 @@ callApi = async () => {
  };
 
  handleSubmit(event) {
-     debugger;
      let _this = this;
      let { classes } = _this.props;
      _this.callApi().then(res => {
@@ -135,13 +135,17 @@ callApi = async () => {
         _this.setState({error:[]});
      })
      .catch(err => {
-        let call_error = [];
-        call_error.push(<MySnackbarContent
-          variant="error"
-          className={classes.margin}
-          message="Error Occurred while getting data"
-        />)
-        _this.setState({error:call_error});
+       if (err.response.status === 500 || err.response.data.error.statusCode === 401) {
+            logoutUser();
+        } else {
+          let call_error = [];
+          call_error.push(<MySnackbarContent
+            variant="error"
+            className={classes.margin}
+            message="Error Occurred while getting data"
+          />)
+          _this.setState({error:call_error});
+        }
         console.log(err);
       });
  }
@@ -200,7 +204,7 @@ createChart(response, project) {
     return (
       <div>
         <MuiThemeProvider theme={theme}>
-          <ButtonAppBar heading = "Dashboard Two" appContext={this.props.appContext}/>
+          <ButtonAppBar heading = "Ticket velocity" appContext={this.props.appContext}/>
         </MuiThemeProvider>
         <br/>
         <MuiThemeProvider theme={theme}>

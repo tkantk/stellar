@@ -4,6 +4,7 @@ import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import '../../Containers/App.css';
 import {getCookie} from '../../Utils/Cookie';
+import {logoutUser} from '../../Utils/Stellar';
 
 class UploadData extends Component {
 
@@ -14,7 +15,12 @@ class UploadData extends Component {
   componentDidMount() {
     this.callApi()
       .then(res => this.setState({ response: res }))
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        if (err.response.status === 500 || err.response.data.error.statusCode === 401) {
+          logoutUser();
+        }
+        });
   }
 
   callApi = async () => {
